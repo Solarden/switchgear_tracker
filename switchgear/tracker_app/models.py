@@ -1,7 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
-# Create your models here.
 
 class Company(models.Model):
     login = models.CharField(max_length=64, unique=True)
@@ -13,12 +12,11 @@ class Company(models.Model):
     company_logo = models.FileField()
 
 
-class User(models.Model):
-    login = models.CharField(max_length=64, unique=True)
-    password = models.CharField(max_length=64)
-    name = models.CharField(max_length=64)
-    surname = models.CharField(max_length=64)
-    working_at = models.ForeignKey(Company, on_delete=models.CASCADE)
+class Worker(AbstractUser):
+    pass
+
+    def __str__(self):
+        return self.username
 
 
 class Client(models.Model):
@@ -28,7 +26,7 @@ class Client(models.Model):
 class Order(models.Model):
     order_name = models.CharField(max_length=64)
     ordered_by = models.ForeignKey(Client, on_delete=models.PROTECT)
-    added_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    added_by = models.ForeignKey(Worker, on_delete=models.PROTECT)
 
 
 class SwitchgearParameters(models.Model):
@@ -53,8 +51,7 @@ class Switchgear(models.Model):
     ready_to_ship = models.BooleanField(default=False)
     req_shipment = models.DateField()
     actual_shipment = models.DateField()
-    made_by = models.ForeignKey(User, on_delete=models.PROTECT)
-    added_by = models.ForeignKey(User, on_delete=models.PROTECT)
+    made_by = models.ManyToManyField(Worker)
     components = models.ManyToManyField('Component', through='SwitchgearComponents')
 
 

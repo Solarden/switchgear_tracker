@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block zawartosc %}
+    <table>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_table }}
+            <tr>
+                <td colspan="2"><p><input type="submit"></p></td>
+            </tr>
+        </form>
+    </table>
+    {% for message in messages %}
+        <p> {{message}}</p>
+    {% endfor %}
+{% endblock %}
