@@ -5,7 +5,7 @@ from tracker_app import models
 
 # Register your models here.
 from tracker_app.forms import WorkerCreationForm, WorkerChangeForm
-from tracker_app.models import Worker
+from tracker_app.models import Worker, Company
 
 
 class CustomUserAdmin(UserAdmin):
@@ -16,3 +16,4 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(Worker, CustomUserAdmin)
+admin.site.register(Company)

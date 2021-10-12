@@ -1,15 +1,20 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import FileSystemStorage
 from django.db import models
+
+fs_logo = FileSystemStorage(location='media/logos/')
 
 
 class Company(models.Model):
-    login = models.CharField(max_length=64, unique=True)
-    password = models.CharField(max_length=64)
-    company_name = models.CharField(max_length=128, unique=True)
-    company_owner = models.CharField(max_length=64)
-    company_hq = models.TextField()
-    company_prod = models.TextField()
-    company_logo = models.FileField()
+    name = models.CharField(max_length=128, unique=True)
+    owner = models.CharField(max_length=64)
+    nip = models.CharField(max_length=13)
+    hq = models.TextField()
+    prod = models.TextField()
+    logo = models.FileField(storage=fs_logo)
+
+    def __str__(self):
+        return self.name
 
 
 class Worker(AbstractUser):

@@ -11,12 +11,43 @@
     <title>{% block title %}Document{% endblock %}</title>
 </head>
 <body>
-
-
-<div class="text-xxl-center">Witaj czytelniku {{ user.username }}</div>
-
+<div class="container">
+    <nav class="navbar navbar-expand-md navbar-light">
+        <a href="{% url 'home' %}" class="navbar-brand">Witaj {{ user.username }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggleMobileMenu"
+                aria-controls="toggleMobileMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="toggleMobileMenu">
+            <ul class="navbar-nav ms-auto text-center">
+                <li>
+                    <a class="nav-link" href="#">Klienci</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#">Zamówienia</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#">Rozdzielnie</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="#">Moje konto</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'company_detail' 1 %}">Dane firmy</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 {% block content %}
-    <div class="container"> Bazowy szablon</div>
+
 {% endblock %}
+<footer>
+    <p style="position: absolute; bottom: 0; left: 0; width: 100%; text-align:center; font-size:11px;">Made by Solarden
+        A.D. 2021</p>
+</footer>
 </body>
 </html>
