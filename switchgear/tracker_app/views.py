@@ -3,9 +3,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
+from django_filters.views import FilterView
 
-from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm
-from tracker_app.models import Company, Worker
+from tracker_app.filters import SwitchgearFilter
+from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm
+from tracker_app.models import Company, Worker, Switchgear
 
 
 class Main(LoginRequiredMixin, View):
@@ -47,3 +49,33 @@ class WorkerUpdateView(LoginRequiredMixin, UpdateView):
     form_class = WorkerChangeForm
     template_name = 'form.html'
     success_url = '/worker/1/'
+
+
+class SwitchgearListView(LoginRequiredMixin, FilterView):
+    login_url = 'login'
+    model = Switchgear
+    template_name = 'switchgear_list.html'
+    ordering = ['serial_no']
+    filterset_class = SwitchgearFilter
+
+
+class SwitchgearDetailView(LoginRequiredMixin, DetailView):
+    login_url = 'login'
+    model = Switchgear
+    template_name = 'switchgear_detail.html'
+
+
+class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_switchgear']
+    model = Switchgear
+    # form_class = SwitchgearModelForm
+    template_name = 'form.html'
+    success_url = '/switchgear/'
+
+
+class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_switchgear']
+    model = Switchgear
+    template_name = 'form.html'
+    form_class = SwitchgearModelForm
+    success_url = '/switchgear/'

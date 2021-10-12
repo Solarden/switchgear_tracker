@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Informacje dotyczące rozdzielni:</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Numer zamówienia: {{ switchgear.order_ref }}</li>
+            <li class="list-group-item text-center">Nazwa rozdzielni: {{ switchgear.name }}</li>
+            <li class="list-group-item text-center">Numer seryjny: {{ switchgear.serial_no }}</li>
+            <li class="list-group-item text-center">Charakterystyka rozdzielni:
+                {% for objs_switchgear in switchgear.switchgear_parameters.all %}
+                    <a href="" class="link-dark">{{ objs_switchgear.name }}</a> {% endfor %}</li>
+            <li class="list-group-item text-center">Status wysyłki: {% if switchgear.shipped %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-check-circle" color="green" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                </svg> {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-x-circle" color="red" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg> {% endif %}</li>
+            <li class="list-group-item text-center">Gotowy do wysyłki: {% if switchgear.ready_to_ship %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-check-circle" color="green" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                </svg> {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-x-circle" color="red" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg> {% endif %}</li>
+            <li class="list-group-item text-center">Żądana data dostawy:
+                {% if switchgear.req_shipment is None %} Brak informacji {% else %}
+                    {{ switchgear.req_shipment }} {% endif %}</li>
+            <li class="list-group-item text-center">Rzeczywista data wysyłki: {% if switchgear.req_shipment is None %}
+                Brak informacji {% else %} {{ switchgear.actual_shipment }} {% endif %}</li>
+            <li class="list-group-item text-center">Wykonany przez: {% for objs_worker in switchgear.made_by.all %}
+                {{ objs_worker.username }} {% endfor %}</li>
+            <li class="list-group-item text-center">Komponenty: <a href="" class="link-dark">Szczegóły</a></li>
+        </ul>
+        <br>
+        {% if request.user|group:"biuro" %}
+            <p class="text-center">
+{#                <a href="{% url 'switchgear_edit' switchgear.pk %}">#}
+                    <button type="button" class="btn btn-primary">Edytuj</button>
+                </a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}

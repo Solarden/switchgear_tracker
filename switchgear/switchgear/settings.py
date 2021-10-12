@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tracker_app',
+    'django_filters',
 ]
 
 AUTH_USER_MODEL = 'tracker_app.Worker'

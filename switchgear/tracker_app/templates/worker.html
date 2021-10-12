@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load groupfilter %}
 {% load static %}
 {% block content %}
     <div class="container">
@@ -12,10 +11,8 @@
             <li class="list-group-item text-center">Ostatnio zalogowany: {{ user.last_login }}</li>
         </ul>
     <br>
-        {% if request.user|group:"admin" %}
             <p class="text-center">
             <a href="{% url 'company_edit' 1 %}"><button type="button" class="btn btn-primary">Edytuj</button></a>
             </p>
-        {% endif %}
     </div>
 {% endblock %}

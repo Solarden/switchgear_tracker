@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, WorkerUpdateView
+from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, \
+    WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +32,7 @@ urlpatterns = [
     path('company/edit/<int:pk>/', UpdateCompanyView.as_view(), name='company_edit'),
     path('worker/<int:pk>/', WorkerDetailView.as_view(), name='worker_detail'),
     path('worker/edit/<int:pk>/', WorkerUpdateView.as_view(), name='worker_edit'),
+    path('switchgear/', SwitchgearListView.as_view(), name='switchgear_list'),
+    path('switchgear/<int:pk>/', SwitchgearDetailView.as_view(), name='switchgear_detail'),
+    path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
 ]
