@@ -21,8 +21,11 @@ from tracker_app.views import Main, SignUpView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html')),
     path('', Main.as_view(), name='home'),
-    path('signup/', SignUpView.as_view(), name='signup'),
     path('', include('django.contrib.auth.urls')),
+    path('login/',
+         auth_views.LoginView.as_view(redirect_authenticated_user=True, template_name='registration/login.html'),
+         name='login'),
+    path('signup/', SignUpView.as_view(), name='signup'),
+
 ]

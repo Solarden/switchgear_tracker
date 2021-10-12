@@ -6,7 +6,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
           integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
     <style>
         body,
         html {
@@ -39,6 +38,7 @@
 
         #form-title {
             color: #1B365C;
+
         }
 
         .login_btn {
@@ -69,6 +69,12 @@
             outline: 0px !important;
         }
 
+        #messages {
+            background-color: grey;
+            color: #fff;
+            padding: 10px;
+            margin-top: 10px;
+        }
     </style>
 
 </head>
@@ -77,76 +83,42 @@
     <div class="d-flex justify-content-center h-100">
         <div class="user_card">
             <div class="d-flex justify-content-center">
-                <h3 id="form-title">ZAREJESTRUJ KONTO</h3>
+
+
+                <h3 id="form-title">ZALOGUJ</h3>
             </div>
             <div class="d-flex justify-content-center form_container">
-
                 <form method="POST" action="">
                     {% csrf_token %}
-                    <div class="input-group mb-2">
+                    <div class="input-group mb-3">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
-                        {{ form.username }}
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        {{ form.first_name }}
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-user"></i></span>
-                        </div>
-                        {{ form.last_name }}
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
-                        </div>
-                        {{ form.email }}
+                        <input type="text" name="username" placeholder="Nazwa użytkownika..." class="form-control">
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-append">
                             <span class="input-group-text"><i class="fas fa-key"></i></span>
                         </div>
-                        {{ form.password1 }}
+                        <input type="password" name="password" placeholder="Hasło..." class="form-control">
                     </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-append">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                        </div>
-                        {{ form.password2 }}
-                    </div>
-
 
                     <div class="d-flex justify-content-center mt-3 login_container">
-                        <input class="btn login_btn" type="submit" value="Zarejestruj konto">
+                        <input class="btn login_btn" type="submit" value="Zaloguj">
                     </div>
                 </form>
+
             </div>
 
             <div class="mt-4">
                 <div class="d-flex justify-content-center links">
-                    Masz już zarejestrowane konto? <a href="{% url 'login' %}" class="ml-2">Zaloguj</a>
+                    Nie masz konta? <a href="{% url 'signup' %}" class="ml-2">Zarejestruj się</a>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
-<script>
-    let form_fields = document.getElementsByTagName('input')
-    form_fields[1].placeholder = 'Nazwa użytkownika..';
-    form_fields[2].placeholder = 'Imię..';
-    form_fields[3].placeholder = 'Nazwisko..';
-    form_fields[4].placeholder = 'Email..';
-    form_fields[5].placeholder = 'Wprowadź hasło...';
-    form_fields[6].placeholder = 'Powtórz hasło...';
-
-    for (let field in form_fields) {
-        form_fields[field].className += ' form-control'
-    }
-</script>
 </body>
+
 </html>

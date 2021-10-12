@@ -12,7 +12,7 @@ class LoginForm(forms.Form):
 class WorkerCreationForm(UserCreationForm):
     class Meta:
         model = Worker
-        fields = ('username', 'email')
+        fields = ('username', 'email', 'first_name', 'last_name')
 
 
 class WorkerChangeForm(UserChangeForm):
