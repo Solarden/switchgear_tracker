@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
-from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView
+from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, WorkerUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,4 +29,6 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('company/<int:pk>/', DetailCompanyView.as_view(), name='company_detail'),
     path('company/edit/<int:pk>/', UpdateCompanyView.as_view(), name='company_edit'),
+    path('worker/<int:pk>/', WorkerDetailView.as_view(), name='worker_detail'),
+    path('worker/edit/<int:pk>/', WorkerUpdateView.as_view(), name='worker_edit'),
 ]

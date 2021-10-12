@@ -13,7 +13,9 @@
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-md navbar-light">
-        <a href="{% url 'home' %}" class="navbar-brand">Witaj {{ user.username }}</a>
+        <a href="{% url 'home' %}" class="navbar-brand">
+            <img src="{% static 'logos/rgt_logo.jpeg' %}" width="150px">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggleMobileMenu"
                 aria-controls="toggleMobileMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,7 +32,7 @@
                     <a class="nav-link" href="#">Rozdzielnie</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="#">Moje konto</a>
+                    <a class="nav-link" href="{% url 'worker_detail' 1 %}">Moje konto</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{% url 'company_detail' 1 %}">Dane firmy</a>

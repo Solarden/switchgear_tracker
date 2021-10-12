@@ -1,13 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import User
-from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.urls import reverse_lazy
-
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic import CreateView, DetailView, UpdateView
 
-from tracker_app.forms import WorkerCreationForm, CompanyModelForm
+from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm
 from tracker_app.models import Company, Worker
 
 
@@ -42,3 +39,11 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     login_url = 'login'
     model = Worker
     template_name = 'worker.html'
+
+
+class WorkerUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = 'login'
+    model = Worker
+    form_class = WorkerChangeForm
+    template_name = 'form.html'
+    success_url = '/worker/1/'

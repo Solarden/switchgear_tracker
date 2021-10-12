@@ -15,9 +15,26 @@ class WorkerCreationForm(UserCreationForm):
 
 
 class WorkerChangeForm(UserChangeForm):
+    password = None
+
     class Meta:
         model = Worker
-        fields = ('username', 'email')
+        fields = ('username', 'email', 'first_name', 'last_name')
+        labels = {
+            'username': 'Nazwa użytkownika',
+            'email': 'Adres email',
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko',
+        }
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+        help_texts = {
+            'username': None,
+        }
 
 
 class CompanyModelForm(forms.ModelForm):
@@ -32,9 +49,10 @@ class CompanyModelForm(forms.ModelForm):
             'prod': 'Adres produkcji',
         }
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control md-5'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
             'owner': forms.TextInput(attrs={'class': 'form-control'}),
             'nip': forms.TextInput(attrs={'class': 'form-control'}),
             'hq': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
             'prod': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
         }
+

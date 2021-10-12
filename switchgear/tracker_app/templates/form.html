@@ -4,7 +4,8 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <p><input type="submit" value="Zapisz"></p>
+            <br>
+            <p><input type="submit" value="Zapisz" class="btn btn-primary"></p>
         </form>
         {% for message in messages %}
             <p> {{ message }}</p>

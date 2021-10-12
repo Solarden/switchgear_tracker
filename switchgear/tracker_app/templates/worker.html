@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load groupfilter %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Informacje dotyczące konta:</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Nazwa użytkownika: {{ user }}</li>
+            <li class="list-group-item text-center">Imię i nazwisko: {{ user.first_name }} {{ user.last_name }}</li>
+            <li class="list-group-item text-center">Adres email: {{ user.email }}</li>
+            <li class="list-group-item text-center">Data dołączenia: {{ user.date_joined }}</li>
+            <li class="list-group-item text-center">Ostatnio zalogowany: {{ user.last_login }}</li>
+        </ul>
+    <br>
+        {% if request.user|group:"admin" %}
+            <p class="text-center">
+            <a href="{% url 'company_edit' 1 %}"><button type="button" class="btn btn-primary">Edytuj</button></a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock %}
