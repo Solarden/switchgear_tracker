@@ -5,7 +5,8 @@ from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 from django_filters.views import FilterView
 
-from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter
+from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter, SwitchgearParametersFilter, ClientFilter, \
+    OrderFilter
 from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
     SwitchgearComponentsModelForm, SwitchgearParametersModelForm, ClientModelForm, OrderModelForm, ComponentModelForm
 from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
@@ -149,12 +150,12 @@ class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = '/switchgear/'
 
 
-# class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
-#     permission_required = ['tracker_app.view_switchgearparameters']
-#     model = SwitchgearParameters
-#     template_name = 'switchgear_parameters_list.html'
-#     filterset_class = SwitchgearParametersFilter
-#     paginate_by = 50
+class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_switchgearparameters']
+    model = SwitchgearParameters
+    template_name = 'switchgear_parameters_list.html'
+    filterset_class = SwitchgearParametersFilter
+    paginate_by = 50
 
 
 class ClientCreateView(PermissionRequiredMixin, CreateView):
@@ -180,12 +181,12 @@ class ClientDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = '/switchgear/'
 
 
-# class ClientListView(PermissionRequiredMixin, FilterView):
-#     permission_required = ['tracker_app.view_client']
-#     model = Client
-#     template_name = 'client_list.html'
-#     filterset_class = ClientFilter
-#     paginate_by = 50
+class ClientListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_client']
+    model = Client
+    template_name = 'client_list.html'
+    filterset_class = ClientFilter
+    paginate_by = 50
 
 
 class OrderCreateView(PermissionRequiredMixin, CreateView):
@@ -211,12 +212,12 @@ class OrderDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = '/switchgear/'
 
 
-# class OrderListView(PermissionRequiredMixin, FilterView):
-#     permission_required = ['tracker_app.view_order']
-#     model = Order
-#     template_name = 'order_list.html'
-#     filterset_class = OrderFilter
-#     paginate_by = 50
+class OrderListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_order']
+    model = Order
+    template_name = 'order_list.html'
+    filterset_class = OrderFilter
+    paginate_by = 50
 
 
 class ComponentCreateView(PermissionRequiredMixin, CreateView):
@@ -242,9 +243,9 @@ class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = '/switchgear/'
 
 
-# class ComponentListView(PermissionRequiredMixin, FilterView):
-#     permission_required = ['tracker_app.view_component']
-#     model = Component
-#     template_name = 'component_list.html'
-#     filterset_class = ComponentFilter
-#     paginate_by = 50
+class ComponentListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_component']
+    model = Component
+    template_name = 'component_list.html'
+    filterset_class = ComponentFilter
+    paginate_by = 50
