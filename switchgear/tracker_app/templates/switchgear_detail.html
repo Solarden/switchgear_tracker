@@ -40,12 +40,13 @@
                 Brak informacji {% else %} {{ switchgear.actual_shipment }} {% endif %}</li>
             <li class="list-group-item text-center">Wykonany przez: {% for objs_worker in switchgear.made_by.all %}
                 {{ objs_worker.username }} {% endfor %}</li>
-            <li class="list-group-item text-center">Komponenty: <a href="" class="link-dark">Szczegóły</a></li>
+            <li class="list-group-item text-center">Komponenty: <a
+                    href="{% url 'switchgear_components_detail' switchgear.pk %}" class="link-dark">Szczegóły</a></li>
         </ul>
         <br>
         {% if request.user|group:"biuro" %}
             <p class="text-center">
-{#                <a href="{% url 'switchgear_edit' switchgear.pk %}">#}
+                <a href="{% url 'switchgear_edit' switchgear.pk %}">
                     <button type="button" class="btn btn-primary">Edytuj</button>
                 </a>
             </p>

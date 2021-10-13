@@ -2,13 +2,31 @@
 {% load static %}
 {% block content %}
     <div class="container">
-        <form action="" method="get">
-            {% csrf_token %}
-            {{ filter.form.as_p }}
-            <div>
-                <input type="submit" class="btn btn-primary col-md-1" value="Szukaj">
+        <form action="" method="get" id="search">
+            <div class="row">
+                <div class="form-group col-md-3"><label for="serial_no">Numer fabryczny:</label>
+                    {{ filter.form.serial_no }}
+                </div>
+                <div class="form-group col-md-3"><label for="name">Nazwa rozdzielni:</label>
+                    {{ filter.form.name }}
+                </div>
+                <div class="form-group col-md-3"><label for="shipped">Wysłana:</label>
+                    {{ filter.form.shipped }}</div>
+                <div class="form-group col-md-3"><label for="made_by">Wykonana przez:</label>
+                    {{ filter.form.made_by }}</div>
             </div>
         </form>
+        <br>
+        <div class="row">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'switchgear_add' %}">
+                    <button class="btn btn-success">Dodaj nową rozdzielnię</button>
+                </a>
+            </div>
+        </div>
         <h3 class="text-center">Rozdzielnie:</h3>
         <table class="table table-striped">
             <thead>
@@ -20,7 +38,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in filter.qs %}
+            {% for item in object_list %}
                 <tr>
                     <td><a href="{% url 'switchgear_detail' item.pk %}" class="link-dark">{{ item.serial_no }}</a></td>
                     <td><a href="{% url 'switchgear_detail' item.pk %}" class="link-dark">{{ item.name }}</a></td>
@@ -39,5 +57,49 @@
                 </tr>
             {% endfor %}
         </table>
+        {% load my_tags %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">Pierwsza</a></li>
+                        {% if page_obj.previous_page_number != 1 %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;
+                                Poprzednia</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+{#                    {% for i in paginator.page_range %}#}
+{#                        <li class="page-item"><a class="page-link" href="?{% param_replace page=i %}">{{ i }}</a></li>#}
+{#                    {% endfor %}#}
+
+                    {% for n in page_obj.paginator.page_range %}
+                        {% if page_obj.number == n %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ n }}<span class="sr-only"></span></span>
+                            </li>
+                        {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {#                    <li class="page-item disabled"><a class="page-link">Page {{ page_obj.number }}#}
+                    {#                        of {{ paginator.num_pages }}</a></li>#}
+                    {% if page_obj.has_next %}
+                        {% if page_obj.next_page_number != paginator.num_pages %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.next_page_number %}">Następna
+                                &raquo;</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Ostatnia</a>
+                        </li>
+                    {% endif %}
+
+                    {#                    <p>Objects {{ page_obj.start_index }}—{{ page_obj.end_index }}</p>#}
+                </ul>
+            </nav>
+        {% endif %}
     </div>
 {% endblock %}

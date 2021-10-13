@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Komponenty {{ switchgear_id.0.switchgear }}:</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Komponent</th>
+                <th scope="col">Numer fabryczny</th>
+                <th scope="col">Dostawca</th>
+                <th scope="col">Potrzebna ilość</th>
+                <th scope="col">Brakująca ilość</th>
+                <th scope="col">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for switchgear in switchgear_id %}
+                <tr>
+                    <td>{{ switchgear.component }}</td>
+                    <td>{% if switchgear.serial_number is None %}Nie określono{% else %}
+                        {{ switchgear.serial_number }}{% endif %}</td>
+                    <td>{% if switchgear.supplier is None %}Nie określono{% else %}
+                        {{ switchgear.supplier }}{% endif %}</td>
+                    <td>{{ switchgear.amount_needed }}</td>
+                    <td>{{ switchgear.amount_missing }}</td>
+                    <td><a href=""><button type="button" class="btn btn-primary btn-sm">Edytuj</button></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% load my_tags %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">Pierwsza</a></li>
+                        {% if page_obj.previous_page_number != 1 %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;
+                                Poprzednia</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% for n in page_obj.paginator.page_range %}
+                        {% if page_obj.number == n %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ n }}<span class="sr-only"></span></span>
+                            </li>
+                        {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        {% if page_obj.next_page_number != paginator.num_pages %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.next_page_number %}">Następna
+                                &raquo;</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Ostatnia</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

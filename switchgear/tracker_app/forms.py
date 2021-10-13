@@ -76,7 +76,7 @@ class SwitchgearModelForm(forms.ModelForm):
             'order_ref': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'serial_no': forms.TextInput(attrs={'class': 'form-control'}),
-            'switchgear_parameters': forms.Select(attrs={'class': 'form-control'}),
+            'switchgear_parameters': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'shipped': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'ready_to_ship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'req_shipment': forms.DateInput(attrs={'class': 'form-control'}),

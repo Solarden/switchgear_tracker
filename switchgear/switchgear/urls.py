@@ -18,7 +18,8 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 
 from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, \
-    WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm
+    WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm, SwitchgearUpdateView, \
+    SwitchgearComponentsDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +36,7 @@ urlpatterns = [
     path('switchgear/', SwitchgearListView.as_view(), name='switchgear_list'),
     path('switchgear/<int:pk>/', SwitchgearDetailView.as_view(), name='switchgear_detail'),
     path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
+    path('switchgear/edit/<int:pk>/', SwitchgearUpdateView.as_view(), name='switchgear_edit'),
+    path('switchgear/components/<int:switchgear_id>/', SwitchgearComponentsDetailView.as_view(),
+         name='switchgear_components_detail'),
 ]
