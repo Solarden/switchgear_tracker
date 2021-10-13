@@ -7,8 +7,9 @@ from django_filters.views import FilterView
 
 from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter
 from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
-    SwitchgearComponentsModelForm
-from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents
+    SwitchgearComponentsModelForm, SwitchgearParametersModelForm, ClientModelForm, OrderModelForm, ComponentModelForm
+from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
+    Component
 
 
 class Main(LoginRequiredMixin, View):
@@ -90,7 +91,7 @@ class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'delete.html'
 
 
-class SwitchgearComponentsDetailView(LoginRequiredMixin, FilterView):
+class SwitchgearComponentsListView(LoginRequiredMixin, FilterView):
     login_url = 'login'
     model = SwitchgearComponents
     template_name = 'switchgear_components_list.html'
@@ -124,3 +125,126 @@ class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
     success_url = '/switchgear/'
     template_name = 'delete.html'
 
+
+class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_switchgearparameters']
+    model = SwitchgearParameters
+    template_name = 'form.html'
+    form_class = SwitchgearParametersModelForm
+    success_url = '/switchgear/'
+
+
+class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_switchgearparameters']
+    model = SwitchgearParameters
+    template_name = 'form.html'
+    form_class = SwitchgearParametersModelForm
+    success_url = '/switchgear/'
+
+
+class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_switchgearparameters']
+    model = SwitchgearParameters
+    template_name = 'form.html'
+    success_url = '/switchgear/'
+
+
+# class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
+#     permission_required = ['tracker_app.view_switchgearparameters']
+#     model = SwitchgearParameters
+#     template_name = 'switchgear_parameters_list.html'
+#     filterset_class = SwitchgearParametersFilter
+#     paginate_by = 50
+
+
+class ClientCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_client']
+    model = Client
+    template_name = 'form.html'
+    form_class = ClientModelForm
+    success_url = '/switchgear/'
+
+
+class ClientUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_client']
+    model = Client
+    template_name = 'form.html'
+    form_class = ClientModelForm
+    success_url = '/switchgear/'
+
+
+class ClientDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_client']
+    model = Client
+    template_name = 'form.html'
+    success_url = '/switchgear/'
+
+
+# class ClientListView(PermissionRequiredMixin, FilterView):
+#     permission_required = ['tracker_app.view_client']
+#     model = Client
+#     template_name = 'client_list.html'
+#     filterset_class = ClientFilter
+#     paginate_by = 50
+
+
+class OrderCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_order']
+    model = Order
+    template_name = 'form.html'
+    form_class = OrderModelForm
+    success_url = '/switchgear/'
+
+
+class OrderUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_client']
+    model = Order
+    template_name = 'form.html'
+    form_class = OrderModelForm
+    success_url = '/switchgear/'
+
+
+class OrderDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_order']
+    model = Client
+    template_name = 'form.html'
+    success_url = '/switchgear/'
+
+
+# class OrderListView(PermissionRequiredMixin, FilterView):
+#     permission_required = ['tracker_app.view_order']
+#     model = Order
+#     template_name = 'order_list.html'
+#     filterset_class = OrderFilter
+#     paginate_by = 50
+
+
+class ComponentCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_component']
+    model = Component
+    template_name = 'form.html'
+    form_class = ComponentModelForm
+    success_url = '/switchgear/'
+
+
+class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_component']
+    model = Component
+    template_name = 'form.html'
+    form_class = ComponentModelForm
+    success_url = '/switchgear/'
+
+
+class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_component']
+    model = Component
+    template_name = 'form.html'
+    success_url = '/switchgear/'
+
+
+# class ComponentListView(PermissionRequiredMixin, FilterView):
+#     permission_required = ['tracker_app.view_component']
+#     model = Component
+#     template_name = 'component_list.html'
+#     filterset_class = ComponentFilter
+#     paginate_by = 50

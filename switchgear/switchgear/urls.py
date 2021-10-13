@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 
 from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, \
     WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm, SwitchgearUpdateView, \
-    SwitchgearComponentsDetailView, SwitchgearComponentsCreateView, SwitchgearComponentsUpdateView, \
+    SwitchgearComponentsListView, SwitchgearComponentsCreateView, SwitchgearComponentsUpdateView, \
     SwitchgearComponentsDeleteView, SwitchgearDeleteView
 
 urlpatterns = [
@@ -39,7 +39,7 @@ urlpatterns = [
     path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
     path('switchgear/edit/<int:pk>/', SwitchgearUpdateView.as_view(), name='switchgear_edit'),
     path('switchgear/delete/<int:pk>/', SwitchgearDeleteView.as_view(), name='switchgear_delete'),
-    path('switchgear/components/<int:switchgear_id>/', SwitchgearComponentsDetailView.as_view(),
+    path('switchgear/components/<int:switchgear_id>/', SwitchgearComponentsListView.as_view(),
          name='switchgear_components_detail'),
     path('switchgear/components/add/', SwitchgearComponentsCreateView.as_view(), name='switchgear_components_add'),
     path('switchgear/components/edit/<int:pk>/', SwitchgearComponentsUpdateView.as_view(),
