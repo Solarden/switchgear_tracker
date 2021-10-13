@@ -21,7 +21,8 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm, SwitchgearUpdateView, \
     SwitchgearComponentsListView, SwitchgearComponentsCreateView, SwitchgearComponentsUpdateView, \
     SwitchgearComponentsDeleteView, SwitchgearDeleteView, SwitchgearParametersListView, SwitchgearParametersDetailView, \
-    SwitchgearParametersUpdateView, SwitchgearParametersDeleteView
+    SwitchgearParametersUpdateView, SwitchgearParametersDeleteView, ClientListView, ClientCreateView, \
+    SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -50,8 +51,14 @@ urlpatterns = [
     path('switchgear/parameters/', SwitchgearParametersListView.as_view(), name='switchgear_parameters_list'),
     path('switchgear/parameters/<int:pk>/', SwitchgearParametersDetailView.as_view(),
          name='switchgear_parameters_detail'),
+    path('switchgear/parameters/add/', SwitchgearParametersCreateView.as_view(), name='switchgear_parameters_add'),
     path('switchgear/parameters/edit/<int:pk>/', SwitchgearParametersUpdateView.as_view(),
          name='switchgear_parameters_edit'),
     path('switchgear/parameters/delete/<int:pk>/', SwitchgearParametersDeleteView.as_view(),
          name='switchgear_parameters_delete'),
+    path('client/', ClientListView.as_view(), name='client_list'),
+    path('client/add/', ClientCreateView.as_view(), name='client_add'),
+    path('client/edit/<int:pk>/', ClientUpdateView.as_view(), name='client_edit'),
+    path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
+    path('order/', OrderListView.as_view(), name='order_list'),
 ]

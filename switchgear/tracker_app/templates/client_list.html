@@ -1,10 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <form action="" method="get" id="search">
+            <div class="row">
+                <div class="form-group"><label for="component">Nazwa klienta:</label>
+                    {{ filter.form.name }}
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="row ms-auto">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>
+            </div>
+            <div class="col-md-2">
+                <a href="{% url 'client_add' %}">
+                    <button class="btn btn-success">Dodaj nowego klienta</button>
+                </a>
+            </div>
+        </div>
+        <h3 class="text-center">Klienci:</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Klient</th>
+                <th scope="col">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in object_list %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{% if request.user|group:"biuro" %}<a href="{% url 'client_edit' item.pk %}">
+                        <button type="button" class="btn btn-primary btn-sm">Edytuj</button></a>{% endif %}
+                    <a href="">
+                        <button type="button" class="btn btn-success btn-sm">Zamówienia klienta</button></a>
+                        {% if request.user|group:"admin" %}
+                            <a href="{% url 'client_delete' item.pk %}">
+                                <button type="button" class="btn btn-danger btn-sm">Usuń</button></a>{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% load my_tags %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">Pierwsza</a></li>
+                        {% if page_obj.previous_page_number != 1 %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;
+                                Poprzednia</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% for n in page_obj.paginator.page_range %}
+                        {% if page_obj.number == n %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ n }}<span class="sr-only"></span></span>
+                            </li>
+                        {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        {% if page_obj.next_page_number != paginator.num_pages %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.next_page_number %}">Następna
+                                &raquo;</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Ostatnia</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}

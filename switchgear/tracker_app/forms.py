@@ -139,41 +139,44 @@ class SwitchgearParametersModelForm(forms.ModelForm):
 
 
 class ClientModelForm(forms.ModelForm):
-    model = Client
-    fields = '__all__'
-    labels = {
-        'name': 'Nazwa klienta',
-    }
-    widgets = {
-        'name': forms.TextInput(attrs={'class': 'form-control'}),
-    }
+    class Meta:
+        model = Client
+        fields = '__all__'
+        labels = {
+            'name': 'Nazwa klienta',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class OrderModelForm(forms.ModelForm):
-    model = Order
-    fields = '__all__'
-    labels = {
-        'order_name': 'Nazwa zamówienia',
-        'ordered_by': 'Klient',
-        'added_by': 'Dodający zamówienie',
-    }
-    widgets = {
-        'order_name': forms.TextInput(attrs={'class': 'form-control'}),
-        'ordered_by': forms.Select(attrs={'class': 'form-control'}),
-        'added_by': forms.Select(attrs={'class': 'form-control'}),
-    }
+    class Meta:
+        model = Order
+        fields = '__all__'
+        labels = {
+            'order_name': 'Nazwa zamówienia',
+            'ordered_by': 'Klient',
+            'added_by': 'Dodający zamówienie',
+        }
+        widgets = {
+            'order_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'ordered_by': forms.Select(attrs={'class': 'form-control'}),
+            'added_by': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 
 class ComponentModelForm(forms.ModelForm):
-    model = Component
-    fields = '__all__'
-    labels = {
-        'name': 'Nazwa komponentu',
-        'producer': 'Producent',
-        'catalogue_number': 'Numer katalogowy',
-    }
-    widgets = {
-        'name': forms.TextInput(attrs={'class': 'form-control'}),
-        'producer': forms.TextInput(attrs={'class': 'form-control'}),
-        'catalogue_number': forms.TextInput(attrs={'class': 'form-control'}),
-    }
+    class Meta:
+        model = Component
+        fields = '__all__'
+        labels = {
+            'name': 'Nazwa komponentu',
+            'producer': 'Producent',
+            'catalogue_number': 'Numer katalogowy',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'producer': forms.TextInput(attrs={'class': 'form-control'}),
+            'catalogue_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
