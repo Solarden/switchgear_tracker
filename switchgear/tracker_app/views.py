@@ -204,6 +204,13 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
     success_url = '/switchgear/'
 
 
+class OrderDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['tracker_app.view_order']
+    login_url = 'login'
+    model = Order
+    template_name = 'order_detail.html'
+
+
 class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_order']
     model = Order

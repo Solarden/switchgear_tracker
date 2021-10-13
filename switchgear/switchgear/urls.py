@@ -22,7 +22,7 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearComponentsListView, SwitchgearComponentsCreateView, SwitchgearComponentsUpdateView, \
     SwitchgearComponentsDeleteView, SwitchgearDeleteView, SwitchgearParametersListView, SwitchgearParametersDetailView, \
     SwitchgearParametersUpdateView, SwitchgearParametersDeleteView, ClientListView, ClientCreateView, \
-    SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView
+    SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -61,4 +61,6 @@ urlpatterns = [
     path('client/edit/<int:pk>/', ClientUpdateView.as_view(), name='client_edit'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),
     path('order/', OrderListView.as_view(), name='order_list'),
+    path('order/add/', OrderCreateView.as_view(), name='order_add'),
+    path('order/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
 ]
