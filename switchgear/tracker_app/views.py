@@ -2,11 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from django_filters.views import FilterView
 
-from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter, SwitchgearParametersFilter, ClientFilter, \
-    OrderFilter, ComponentFilter
+from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter, SwitchgearParametersFilter, \
+    ClientFilter, OrderFilter, ComponentFilter
 from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
     SwitchgearComponentsModelForm, SwitchgearParametersModelForm, ClientModelForm, OrderModelForm, ComponentModelForm
 from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
@@ -210,6 +210,11 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
     model = Order
     template_name = 'order_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['switchgears'] = Switchgear.objects.all().filter(order_ref=self.object)
+        return context
+
 
 class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_order']
@@ -221,7 +226,7 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
 
 class OrderDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_order']
-    model = Client
+    model = Order
     template_name = 'delete.html'
     success_url = '/switchgear/'
 

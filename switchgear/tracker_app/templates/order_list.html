@@ -36,12 +36,12 @@
             <tbody>
             {% for item in object_list %}
                 <tr>
-                    <td><a href="" class="link-dark">{{ item.order_name }}</a></td>
+                    <td><a href="{% url 'order_detail' item.pk %}" class="link-dark">{{ item.order_name }}</a></td>
                     <td>{{ item.ordered_by }}</td>
-                    <td>{% if request.user|group:"biuro" %}<a href="{% url 'client_edit' item.pk %}">
+                    <td>{% if request.user|group:"biuro" %}<a href="{% url 'order_edit' item.pk %}">
                         <button type="button" class="btn btn-primary btn-sm">Edytuj</button></a>{% endif %}
                         {% if request.user|group:"admin" %}
-                            <a href="{% url 'client_delete' item.pk %}">
+                            <a href="{% url 'order_delete' item.pk %}">
                                 <button type="button" class="btn btn-danger btn-sm">Usuń</button></a>{% endif %}</td>
                 </tr>
             {% endfor %}

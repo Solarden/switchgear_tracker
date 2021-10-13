@@ -62,7 +62,7 @@ class OrderFilter(django_filters.FilterSet):
     order_name = CharFilter(field_name='order_name', lookup_expr='icontains', label="Nazwa zamówienia:",
                             widget=forms.TextInput(
                                 attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę zamówienia'}))
-    ordered_by = CharFilter(field_name='ordered_by', lookup_expr='icontains', label="Nazwa klienta:",
+    ordered_by = CharFilter(field_name='ordered_by__name', lookup_expr='icontains', label="Nazwa klienta:",
                             widget=forms.TextInput(
                                 attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę klienta'}))
 
