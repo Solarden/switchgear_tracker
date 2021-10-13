@@ -72,11 +72,10 @@ class OrderFilter(django_filters.FilterSet):
 
 
 class ComponentFilter(django_filters.FilterSet):
-    name = CharFilter(field_name='name', lookup_expr='icontains', label="Nazwa rozdzielni:",
+    name = CharFilter(field_name='name', lookup_expr='icontains', label="Nazwa komponentu:",
                       widget=forms.TextInput(
                           attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę komponentu'}))
-    catalogue_number = CharFilter(field_name='catalogue_number', lookup_expr='icontains',
-                                  label="Nazwa rozdzielni:",
+    catalogue_number = CharFilter(field_name='catalogue_number', lookup_expr='icontains', label="Numer katalogowy:",
                                   widget=forms.TextInput(
                                       attrs={'class': 'form-control', 'placeholder': 'Wprowadź numer katalogowy'}))
 

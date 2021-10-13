@@ -132,7 +132,7 @@ class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
     model = SwitchgearParameters
     template_name = 'form.html'
     form_class = SwitchgearParametersModelForm
-    success_url = '/switchgear/'
+    success_url = '/switchgear/parameters/'
 
 
 class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
@@ -147,14 +147,14 @@ class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
     model = SwitchgearParameters
     template_name = 'form.html'
     form_class = SwitchgearParametersModelForm
-    success_url = '/switchgear/'
+    success_url = '/switchgear/parameters/'
 
 
 class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_switchgearparameters']
     model = SwitchgearParameters
     template_name = 'delete.html'
-    success_url = '/switchgear/'
+    success_url = '/switchgear/parameters/'
 
 
 class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
@@ -170,7 +170,7 @@ class ClientCreateView(PermissionRequiredMixin, CreateView):
     model = Client
     template_name = 'form.html'
     form_class = ClientModelForm
-    success_url = '/switchgear/'
+    success_url = '/client/'
 
 
 class ClientUpdateView(PermissionRequiredMixin, UpdateView):
@@ -178,14 +178,14 @@ class ClientUpdateView(PermissionRequiredMixin, UpdateView):
     model = Client
     template_name = 'form.html'
     form_class = ClientModelForm
-    success_url = '/switchgear/'
+    success_url = '/client/'
 
 
 class ClientDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_client']
     model = Client
     template_name = 'delete.html'
-    success_url = '/switchgear/'
+    success_url = '/client/'
 
 
 class ClientListView(PermissionRequiredMixin, FilterView):
@@ -201,7 +201,7 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
     model = Order
     template_name = 'form.html'
     form_class = OrderModelForm
-    success_url = '/switchgear/'
+    success_url = '/order/'
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
@@ -221,14 +221,14 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     model = Order
     template_name = 'form.html'
     form_class = OrderModelForm
-    success_url = '/switchgear/'
+    success_url = '/order/'
 
 
 class OrderDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_order']
     model = Order
     template_name = 'delete.html'
-    success_url = '/switchgear/'
+    success_url = '/order/'
 
 
 class OrderListView(PermissionRequiredMixin, FilterView):
@@ -244,7 +244,7 @@ class ComponentCreateView(PermissionRequiredMixin, CreateView):
     model = Component
     template_name = 'form.html'
     form_class = ComponentModelForm
-    success_url = '/switchgear/'
+    success_url = '/component/'
 
 
 class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
@@ -252,14 +252,14 @@ class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
     model = Component
     template_name = 'form.html'
     form_class = ComponentModelForm
-    success_url = '/switchgear/'
+    success_url = '/component/'
 
 
 class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_component']
     model = Component
     template_name = 'delete.html'
-    success_url = '/switchgear/'
+    success_url = '/component/'
 
 
 class ComponentListView(PermissionRequiredMixin, FilterView):

@@ -23,7 +23,7 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearComponentsDeleteView, SwitchgearDeleteView, SwitchgearParametersListView, SwitchgearParametersDetailView, \
     SwitchgearParametersUpdateView, SwitchgearParametersDeleteView, ClientListView, ClientCreateView, \
     SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView, \
-    OrderUpdateView, OrderDeleteView
+    OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -66,4 +66,8 @@ urlpatterns = [
     path('order/<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
     path('order/edit/<int:pk>', OrderUpdateView.as_view(), name='order_edit'),
     path('order/delete/<int:pk>/', OrderDeleteView.as_view(), name='order_delete'),
+    path('component/', ComponentListView.as_view(), name='component_list'),
+    path('component/add/', ComponentCreateView.as_view(), name='component_add'),
+    path('component/edit/<int:pk>/', ComponentUpdateView.as_view(), name='component_edit'),
+    path('component/delete/<int:pk>/', ComponentDeleteView.as_view(), name='component_delete'),
 ]
