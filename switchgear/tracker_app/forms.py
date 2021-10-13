@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from tracker_app.models import Worker, Company, Switchgear, SwitchgearComponents
+from tracker_app.models import Worker, Company, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
+    Component
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -105,3 +106,74 @@ class SwitchgearComponentsModelForm(forms.ModelForm):
             'serial_number': forms.TextInput(attrs={'class': 'form-control'}),
             'supplier': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+
+class SwitchgearParametersModelForm(forms.ModelForm):
+    class Meta:
+        model = SwitchgearParameters
+        fields = '__all__'
+        labels = {
+            'name': 'Nazwa charakterystyki',
+            'par_a': 'Prąd znamionowy (A)',
+            'par_ka': 'Prąd zwarciowy (kA)',
+            'par_v': 'Napięcie znamionowe (V)',
+            'par_ui': 'Napięcie wytrzymywane (Ul)',
+            'par_hz': 'Częstotliwość znamionowa (Hz)',
+            'par_grid': 'Typ sieci',
+            'par_protection': 'Klasa ochronności',
+            'par_ip': 'Klasa ochronności IP',
+            'par_ik': 'Klasyfikacja (udary mechaniczne) IK',
+        }
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'par_a': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_ka': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_v': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_ui': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_hz': forms.TextInput(attrs={'class': 'form-control'}),
+            'par_grid': forms.TextInput(attrs={'class': 'form-control'}),
+            'par_protection': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_ip': forms.NumberInput(attrs={'class': 'form-control'}),
+            'par_ik': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class ClientModelForm(forms.ModelForm):
+    model = Client
+    fields = '__all__'
+    labels = {
+        'name': 'Nazwa klienta',
+    }
+    widgets = {
+        'name': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
+
+class OrderModelForm(forms.ModelForm):
+    model = Order
+    fields = '__all__'
+    labels = {
+        'order_name': 'Nazwa zamówienia',
+        'ordered_by': 'Klient',
+        'added_by': 'Dodający zamówienie',
+    }
+    widgets = {
+        'order_name': forms.TextInput(attrs={'class': 'form-control'}),
+        'ordered_by': forms.Select(attrs={'class': 'form-control'}),
+        'added_by': forms.Select(attrs={'class': 'form-control'}),
+    }
+
+
+class ComponentModelForm(forms.ModelForm):
+    model = Component
+    fields = '__all__'
+    labels = {
+        'name': 'Nazwa komponentu',
+        'producer': 'Producent',
+        'catalogue_number': 'Numer katalogowy',
+    }
+    widgets = {
+        'name': forms.TextInput(attrs={'class': 'form-control'}),
+        'producer': forms.TextInput(attrs={'class': 'form-control'}),
+        'catalogue_number': forms.TextInput(attrs={'class': 'form-control'}),
+    }

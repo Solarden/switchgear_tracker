@@ -123,3 +123,4 @@ class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
     model = SwitchgearComponents
     success_url = '/switchgear/'
     template_name = 'delete.html'
+
