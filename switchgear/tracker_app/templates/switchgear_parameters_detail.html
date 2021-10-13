@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Informacje dotyczące charakterystyki:</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Nazwa charakterystyki: {{ switchgearparameters.name }}</li>
+            <li class="list-group-item text-center">Prąd znamionowy (A): {{ switchgearparameters.par_a }} A</li>
+            <li class="list-group-item text-center">Prąd zwarciowy (kA): {{ switchgearparameters.par_ka }} kA</li>
+            <li class="list-group-item text-center">Napięcie znamionowe (V): {{ switchgearparameters.par_v }} V</li>
+            <li class="list-group-item text-center">Napięcie wytrzymywane (Ul): {{ switchgearparameters.par_ui }} V</li>
+            <li class="list-group-item text-center">Częstotliwość znamionowa
+                (Hz): {{ switchgearparameters.par_hz }} Hz
+            </li>
+            <li class="list-group-item text-center">Typ sieci: {{ switchgearparameters.par_grid }}</li>
+            <li class="list-group-item text-center">Klasa ochronności: {{ switchgearparameters.par_protection }}</li>
+            <li class="list-group-item text-center">Klasa ochronności IP: IP{{ switchgearparameters.par_ip }}</li>
+            <li class="list-group-item text-center">Klasyfikacja (udary mechaniczne)
+                IK: IK{{ switchgearparameters.par_ik }}</li>
+        </ul>
+        <br>
+        <div class="text-center">
+            {% if request.user|group:"biuro" %}
+                <a href="{% url 'switchgear_parameters_edit' switchgearparameters.pk %}">
+                    <button type="button" class="btn btn-primary">Edytuj</button></a>
+            {% endif %}
+            {% if request.user|group:"admin" %}
+                <a href="{% url 'switchgear_parameters_delete' switchgearparameters.pk %}">
+                    <button type="button" class="btn btn-danger">Usuń</button></a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

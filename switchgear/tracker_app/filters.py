@@ -39,9 +39,9 @@ class SwitchgearComponentsFilter(django_filters.FilterSet):
 
 
 class SwitchgearParametersFilter(django_filters.FilterSet):
-    name = CharFilter(field_name='name', lookup_expr='icontains', label="Nazwa komponentu:",
+    name = CharFilter(field_name='name', lookup_expr='icontains', label="Nazwa charakterystyki:",
                       widget=forms.TextInput(
-                          attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę komponentu'}))
+                          attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę charakterystyki'}))
 
     class Meta:
         model = SwitchgearParameters
