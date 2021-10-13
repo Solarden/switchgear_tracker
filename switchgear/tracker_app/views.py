@@ -2,11 +2,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic import CreateView, DetailView, UpdateView, ListView, DeleteView
 from django_filters.views import FilterView
 
-from tracker_app.filters import SwitchgearFilter
-from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm
+from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter
+from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
+    SwitchgearComponentsModelForm
 from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents
 
 
@@ -82,20 +83,43 @@ class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     success_url = '/switchgear/'
 
 
-class SwitchgearComponentsDetailView(LoginRequiredMixin, ListView):
+class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_switchgear']
+    model = Switchgear
+    success_url = '/switchgear/'
+    template_name = 'delete.html'
+
+
+class SwitchgearComponentsDetailView(LoginRequiredMixin, FilterView):
     login_url = 'login'
     model = SwitchgearComponents
-    template_name = 'switchgear_components_detail.html'
+    template_name = 'switchgear_components_list.html'
     context_object_name = 'switchgear_id'
+    filterset_class = SwitchgearComponentsFilter
     paginate_by = 50
 
     def get_queryset(self):
         return SwitchgearComponents.objects.filter(switchgear_id=self.kwargs['switchgear_id'])
 
 
-class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
-    permission_required = ['tracker_app.change_switchgear']
+class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_switchgearcomponents']
     model = SwitchgearComponents
-    form_class = SwitchgearModelForm
+    template_name = 'form.html'
+    form_class = SwitchgearComponentsModelForm
+    success_url = '/switchgear/'
+
+
+class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_switchgearcomponents']
+    model = SwitchgearComponents
+    form_class = SwitchgearComponentsModelForm
     template_name = 'form.html'
     success_url = '/switchgear/'
+
+
+class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_switchgearcomponents']
+    model = SwitchgearComponents
+    success_url = '/switchgear/'
+    template_name = 'delete.html'

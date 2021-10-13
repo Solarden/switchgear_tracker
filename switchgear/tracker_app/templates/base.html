@@ -23,6 +23,9 @@
         <div class="collapse navbar-collapse" id="toggleMobileMenu">
             <ul class="navbar-nav ms-auto text-center">
                 <li>
+                    <a class="nav-link" href="{% url 'company_detail' 1 %}">Dane firmy</a>
+                </li>
+                <li>
                     <a class="nav-link" href="#">Klienci</a>
                 </li>
                 <li>
@@ -32,10 +35,10 @@
                     <a class="nav-link" href="{% url 'switchgear_list' %}">Rozdzielnie</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{% url 'worker_detail' 1 %}">Moje konto</a>
+                    <a class="nav-link" href="#">Komponenty</a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{% url 'company_detail' 1 %}">Dane firmy</a>
+                    <a class="nav-link" href="{% url 'worker_detail' 1 %}">Moje konto</a>
                 </li>
                 <li>
                     <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>

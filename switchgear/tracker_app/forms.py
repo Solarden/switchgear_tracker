@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from tracker_app.models import Worker, Company, Switchgear
+from tracker_app.models import Worker, Company, Switchgear, SwitchgearComponents
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -82,4 +82,26 @@ class SwitchgearModelForm(forms.ModelForm):
             'req_shipment': forms.DateInput(attrs={'class': 'form-control'}),
             'actual_shipment': forms.DateInput(attrs={'class': 'form-control'}),
             'made_by': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+
+
+class SwitchgearComponentsModelForm(forms.ModelForm):
+    class Meta:
+        model = SwitchgearComponents
+        fields = '__all__'
+        labels = {
+            'component': 'Komponent',
+            'switchgear': 'Rozdzielnia',
+            'amount_needed': 'Potrzebna ilość',
+            'amount_missing': 'Brakująca ilość',
+            'serial_number': 'Numer fabryczny',
+            'supplier': 'Dostawca',
+        }
+        widgets = {
+            'component': forms.Select(attrs={'class': 'form-control'}),
+            'switchgear': forms.Select(attrs={'class': 'form-control'}),
+            'amount_needed': forms.NumberInput(attrs={'class': 'form-control'}),
+            'amount_missing': forms.NumberInput(attrs={'class': 'form-control'}),
+            'serial_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'supplier': forms.TextInput(attrs={'class': 'form-control'}),
         }
