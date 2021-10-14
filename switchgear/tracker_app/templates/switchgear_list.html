@@ -70,22 +70,15 @@
                             </li>
                         {% endif %}
                     {% endif %}
-{#                    {% for i in paginator.page_range %}#}
-{#                        <li class="page-item"><a class="page-link" href="?{% param_replace page=i %}">{{ i }}</a></li>#}
-{#                    {% endfor %}#}
-
                     {% for n in page_obj.paginator.page_range %}
                         {% if page_obj.number == n %}
                             <li class="page-item active">
                                 <span class="page-link">{{ n }}<span class="sr-only"></span></span>
                             </li>
                         {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
-                            <li class="page-item"><a class="page-link" href="?page={{ n }}">{{ n }}</a></li>
+                            <li class="page-item"><a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a></li>
                         {% endif %}
                     {% endfor %}
-
-                    {#                    <li class="page-item disabled"><a class="page-link">Page {{ page_obj.number }}#}
-                    {#                        of {{ paginator.num_pages }}</a></li>#}
                     {% if page_obj.has_next %}
                         {% if page_obj.next_page_number != paginator.num_pages %}
                             <li class="page-item"><a class="page-link"
@@ -96,8 +89,6 @@
                         <li class="page-item"><a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Ostatnia</a>
                         </li>
                     {% endif %}
-
-                    {#                    <p>Objects {{ page_obj.start_index }}—{{ page_obj.end_index }}</p>#}
                 </ul>
             </nav>
         {% endif %}
