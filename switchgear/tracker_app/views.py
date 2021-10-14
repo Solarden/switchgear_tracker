@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -46,12 +47,18 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     template_name = 'worker.html'
 
 
-class WorkerUpdateView(LoginRequiredMixin, UpdateView):
+class WorkerUpdateView(UserPassesTestMixin, UpdateView):
     login_url = 'login'
     model = Worker
     form_class = WorkerChangeForm
     template_name = 'form.html'
-    success_url = '/worker/1/'
+    success_url = '/worker/'
+
+    def test_func(self):
+        if self.request.user.pk == int(self.kwargs['pk']):
+            return True
+        else:
+            raise Http404
 
 
 class SwitchgearListView(LoginRequiredMixin, FilterView):
