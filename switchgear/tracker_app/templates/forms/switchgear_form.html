@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row">
+                <div class="form-group col-md-4">
+                    {{ form.order_ref.label }}
+                    {{ form.order_ref }}
+                </div>
+                <div class="form-group col-md-4">
+                    {{ form.name.label }}
+                    {{ form.name }}
+                </div>
+                <div class="form-group col-md-4">
+                    {{ form.serial_no.label }}
+                    {{ form.serial_no }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    {{ form.switchgear_parameters.label }}
+                    {{ form.switchgear_parameters }}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.made_by.label }}
+                    {{ form.made_by }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    {{ form.req_shipment.label }}
+                    {{ form.req_shipment }}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.actual_shipment.label }}
+                    {{ form.actual_shipment }}
+                </div>
+            </div>
+            <div class="row justify-content-around">
+                <div class="col-3"></div>
+                <div class="col-3">
+                    {{ form.shipped.label }}
+                    {{ form.shipped }}
+                </div>
+                <div class="col-3">
+                    {{ form.ready_to_ship.label }}
+                    {{ form.ready_to_ship }}
+                </div>
+                <div class="col-3"></div>
+            </div>
+            <br>
+            <h6>Datę wprowadź w formacie "rok-miesiąc-dzień", przykład 2005-04-02.</h6>
+            <br>
+            <p><input type="submit" value="Zapisz" class="btn btn-primary"></p>
+        </form>
+        {% for message in messages %}
+            <p> {{ message }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

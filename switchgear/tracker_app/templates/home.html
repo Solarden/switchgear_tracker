@@ -1,9 +1,80 @@
 {% extends 'base.html' %}
 
-{% block title %}Strona główna{% endblock %}
+
 
 {% block content %}
     <div class="container">
-
+        <h3>Cześć, {{ user }}</h3>
+        <br>
+        <div class="row justify-content-around">
+            <div class="col-3 bg-secondary text-white">
+                Liczba klientów w bazie: {{ clients }}
+            </div>
+            <div class="col-3 bg-secondary text-white">
+                Liczba zamówień w bazie: {{ orders }}
+            </div>
+            <div class="col-3 bg-secondary text-white">
+                Liczba rozdzielni w bazie: {{ switchgears }}
+            </div>
+        </div>
+        <br><br>
+        <h4>Szybkie akcje:</h4>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="w-50">Klienci</td>
+                <td>
+                    <a href="{% url 'client_list' %}">
+                        <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
+                    <a href="{% url 'client_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>Zamówienia</td>
+                <td>
+                    <a href="{% url 'order_list' %}">
+                        <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
+                    <a href="{% url 'order_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>Rozdzielnie</td>
+                <td>
+                    <a href="{% url 'switchgear_list' %}">
+                        <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
+                    <a href="{% url 'switchgear_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>Komponenty</td>
+                <td>
+                    <a href="{% url 'component_list' %}">
+                        <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
+                    <a href="{% url 'component_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                    <a href="{% url 'switchgear_components_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj komponent do rozdzielni</button></a>
+                </td>
+            </tr>
+            <tr>
+                <td>Charakterystyki rozdzielni</td>
+                <td>
+                    <a href="{% url 'switchgear_parameters_list' %}">
+                        <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
+                    <a href="{% url 'switchgear_parameters_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 {% endblock %}

@@ -10,9 +10,12 @@
             <li class="list-group-item text-center">Data dołączenia: {{ user.date_joined }}</li>
             <li class="list-group-item text-center">Ostatnio zalogowany: {{ user.last_login }}</li>
         </ul>
-    <br>
-            <p class="text-center">
-            <a href="{% url 'worker_edit' user.pk %}"><button type="button" class="btn btn-primary">Edytuj</button></a>
-            </p>
+        <br>
+        <div class="text-center">
+            <a href="{% url 'worker_edit' user.pk %}">
+                <button type="button" class="btn btn-primary">Edytuj</button></a>
+            <a href="">
+                <button type="button" class="btn btn-info">Zmień hasło</button></a>
+        </div>
     </div>
 {% endblock %}

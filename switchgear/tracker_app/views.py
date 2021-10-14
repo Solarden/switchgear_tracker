@@ -18,7 +18,10 @@ class Main(LoginRequiredMixin, View):
     login_url = 'login'
 
     def get(self, request):
-        return render(request, 'home.html')
+        clients = Client.objects.all().count()
+        orders = Order.objects.all().count()
+        switchgears = Switchgear.objects.all().count()
+        return render(request, 'home.html', {'clients': clients, 'orders': orders, 'switchgears': switchgears})
 
 
 class SignUpView(CreateView):
@@ -27,7 +30,8 @@ class SignUpView(CreateView):
     template_name = 'signup.html'
 
 
-class DetailCompanyView(LoginRequiredMixin, DetailView):
+class DetailCompanyView(PermissionRequiredMixin, DetailView):
+    permission_required = ['tracker_app.view_company']
     login_url = 'login'
     model = Company
     template_name = 'company.html'
@@ -51,7 +55,7 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
     login_url = 'login'
     model = Worker
     form_class = WorkerChangeForm
-    template_name = 'form.html'
+    template_name = 'forms/worker_form.html'
     success_url = '/worker/'
 
     def test_func(self):
@@ -61,8 +65,8 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
             raise Http404
 
 
-class SwitchgearListView(LoginRequiredMixin, FilterView):
-    login_url = 'login'
+class SwitchgearListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_switchgear']
     model = Switchgear
     template_name = 'switchgear_list.html'
     ordering = ['serial_no']
@@ -70,7 +74,8 @@ class SwitchgearListView(LoginRequiredMixin, FilterView):
     paginate_by = 50
 
 
-class SwitchgearDetailView(LoginRequiredMixin, DetailView):
+class SwitchgearDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['tracker_app.view_switchgear']
     login_url = 'login'
     model = Switchgear
     template_name = 'switchgear_detail.html'
@@ -80,14 +85,14 @@ class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgear']
     model = Switchgear
     form_class = SwitchgearModelForm
-    template_name = 'form.html'
+    template_name = 'forms/switchgear_form.html'
     success_url = '/switchgear/'
 
 
 class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_switchgear']
     model = Switchgear
-    template_name = 'form.html'
+    template_name = 'forms/switchgear_form.html'
     form_class = SwitchgearModelForm
     success_url = '/switchgear/'
 
@@ -99,8 +104,8 @@ class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'delete.html'
 
 
-class SwitchgearComponentsListView(LoginRequiredMixin, FilterView):
-    login_url = 'login'
+class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_switchgearcomponents']
     model = SwitchgearComponents
     template_name = 'switchgear_components_list.html'
     context_object_name = 'switchgear_id'
@@ -137,7 +142,7 @@ class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
 class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_switchgearparameters']
     model = SwitchgearParameters
-    template_name = 'form.html'
+    template_name = 'forms/switchgear_parameters_form.html'
     form_class = SwitchgearParametersModelForm
     success_url = '/switchgear/parameters/'
 
@@ -152,7 +157,7 @@ class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
 class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgearparameters']
     model = SwitchgearParameters
-    template_name = 'form.html'
+    template_name = 'forms/switchgear_parameters_form.html'
     form_class = SwitchgearParametersModelForm
     success_url = '/switchgear/parameters/'
 
