@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load groupfilter %}
 
 
 {% block content %}
@@ -32,8 +32,8 @@
                 <td>
                     <a href="{% url 'client_list' %}">
                         <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
-                    <a href="{% url 'client_add' %}">
-                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                    {% if request.user|group:"biuro,admin" %}<a href="{% url 'client_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>{% endif %}
                 </td>
             </tr>
             <tr>
@@ -41,8 +41,8 @@
                 <td>
                     <a href="{% url 'order_list' %}">
                         <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
-                    <a href="{% url 'order_add' %}">
-                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                    {% if request.user|group:"biuro,admin" %}<a href="{% url 'order_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>{% endif %}
                 </td>
             </tr>
             <tr>
@@ -50,8 +50,8 @@
                 <td>
                     <a href="{% url 'switchgear_list' %}">
                         <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
-                    <a href="{% url 'switchgear_add' %}">
-                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                    {% if request.user|group:"biuro,admin" %}<a href="{% url 'switchgear_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>{% endif %}
                 </td>
             </tr>
             <tr>
@@ -70,8 +70,8 @@
                 <td>
                     <a href="{% url 'switchgear_parameters_list' %}">
                         <button type="button" class="btn btn-primary btn-sm">Wyświetl</button></a>
-                    <a href="{% url 'switchgear_parameters_add' %}">
-                        <button class="btn btn-success btn-sm">Dodaj</button></a>
+                    {% if request.user|group:"biuro,admin" %}<a href="{% url 'switchgear_parameters_add' %}">
+                        <button class="btn btn-success btn-sm">Dodaj</button></a>{% endif %}
                 </td>
             </tr>
             </tbody>
