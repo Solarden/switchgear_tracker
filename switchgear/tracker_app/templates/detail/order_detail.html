@@ -6,7 +6,7 @@
         <h3 class="text-center">Informacje dotyczące zamówienia:</h3>
         <ul class="list-group list-group-flush">
             <li class="list-group-item text-center">Nazwa zamówienia: {{ order.order_name }}</li>
-            <li class="list-group-item text-center">Klient zamawiający: {{ order.ordered_by }}</li>
+            <li class="list-group-item text-center">Klient zamawiający: <a href="{% url 'client_detail' order.pk %}" class="link-dark">{{ order.ordered_by }}</a></li>
             <li class="list-group-item text-center">Zamówienie dodane przez: {{ order.added_by }}</li>
         </ul>
         <br>

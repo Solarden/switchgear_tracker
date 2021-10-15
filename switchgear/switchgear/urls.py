@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from django.urls import path, include
 
 from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, \
     WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm, SwitchgearUpdateView, \
@@ -23,7 +23,8 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearComponentsDeleteView, SwitchgearDeleteView, SwitchgearParametersListView, SwitchgearParametersDetailView, \
     SwitchgearParametersUpdateView, SwitchgearParametersDeleteView, ClientListView, ClientCreateView, \
     SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView, \
-    OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView
+    OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView, \
+    WorkerPasswordChangeFormView, ClientDetailView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,6 +38,7 @@ urlpatterns = [
     path('company/edit/<int:pk>/', UpdateCompanyView.as_view(), name='company_edit'),
     path('worker/<int:pk>/', WorkerDetailView.as_view(), name='worker_detail'),
     path('worker/edit/<int:pk>/', WorkerUpdateView.as_view(), name='worker_edit'),
+    path('worker/edit/password/', WorkerPasswordChangeFormView.as_view(), name='worker_edit_password'),
     path('switchgear/', SwitchgearListView.as_view(), name='switchgear_list'),
     path('switchgear/<int:pk>/', SwitchgearDetailView.as_view(), name='switchgear_detail'),
     path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
@@ -58,6 +60,7 @@ urlpatterns = [
     path('switchgear/parameters/delete/<int:pk>/', SwitchgearParametersDeleteView.as_view(),
          name='switchgear_parameters_delete'),
     path('client/', ClientListView.as_view(), name='client_list'),
+    path('client/<int:pk>/', ClientDetailView.as_view(), name='client_detail'),
     path('client/add/', ClientCreateView.as_view(), name='client_add'),
     path('client/edit/<int:pk>/', ClientUpdateView.as_view(), name='client_edit'),
     path('client/delete/<int:pk>/', ClientDeleteView.as_view(), name='client_delete'),

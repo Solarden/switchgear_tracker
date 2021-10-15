@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 from tracker_app.models import Worker, Company, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
     Component
@@ -38,6 +38,20 @@ class WorkerChangeForm(UserChangeForm):
         }
 
 
+class WorkerPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': 'Wprowadź bieżące hasło', 'type': 'password', }))
+    new_password1 = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Wprowadź nowe hasło', 'type': 'password', }))
+    new_password2 = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Powtórz nowe hasło', 'type': 'password', }))
+
+    class Meta:
+        model = Worker
+        fields = ('old_password', 'new_password1', 'new_password2')
+
+
 class CompanyModelForm(forms.ModelForm):
     class Meta:
         model = Company
@@ -68,7 +82,7 @@ class SwitchgearModelForm(forms.ModelForm):
             'serial_no': 'Numer seryjny',
             'switchgear_parameters': 'Charakterystyka rozdzielni',
             'shipped': 'Status wysyłki',
-            'ready_to_ship': 'Gotowy do wysyłki',
+            'ready_to_ship': 'Gotowa do wysyłki',
             'req_shipment': 'Żądana data dostawy',
             'actual_shipment': 'Rzeczywista data wysyłki',
             'made_by': 'Wykonany przez',
@@ -80,8 +94,8 @@ class SwitchgearModelForm(forms.ModelForm):
             'switchgear_parameters': forms.SelectMultiple(attrs={'class': 'form-control'}),
             'shipped': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'ready_to_ship': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'req_shipment': forms.DateInput(attrs={'class': 'form-control'}),
-            'actual_shipment': forms.DateInput(attrs={'class': 'form-control'}),
+            'req_shipment': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'actual_shipment': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'made_by': forms.SelectMultiple(attrs={'class': 'form-control'}),
         }
 
