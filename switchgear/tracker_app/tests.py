@@ -30,20 +30,23 @@ def test_signup(user):
     assert response.status_code == 200
 
 
-# @pytest.mark.django_db
-# def test_signup_post_register():
-#     client = Client()
-#     a = {
-#         'username': 'testowy',
-#         'email': 'test@test.pl',
-#         'first_name': 'pawel',
-#         'last_name': 'testowy',
-#         'password1': 'tymczasowe',
-#         'password2': 'tymczasowe',
-#     }
-#     response = client.post(reverse("signup"), data=a)
-#     assert response.status_code == 200
-#     Worker.objects.get(**a)
+@pytest.mark.django_db
+def test_signup_post_register():
+    client = Client()
+    a = {
+        'username': 'zajaczek',
+        'email': 'test@test.pl',
+        'first_name': 'pawel',
+        'last_name': 'testowy',
+        'password1': 'tymczasowe!@#',
+        'password2': 'tymczasowe!@#',
+    }
+    response = client.post(reverse("signup"), data=a)
+    assert response.status_code == 302
+    del a['password1']
+    del a['password2']
+    Worker.objects.get(**a)
+
 
 # HOME VIEW TESTS
 
@@ -123,9 +126,45 @@ def test_remove_client_no_perm(user_perm_view_add_client):
 
 
 @pytest.mark.django_db
-def test_delete_client_with_perm(user_perm_view_add_delete_client):
+def test_delete_client_with_perm(user_perm_view_add_delete_client, add_client):
     client = Client()
     client.force_login(user_perm_view_add_delete_client)
-    ModelClient.objects.create(name='pawel')
-    response = client.post(reverse("client_delete", kwargs={'pk': 1}))
+    response = client.post(reverse("client_delete", kwargs={'pk': add_client.pk}))
     assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_change_client_with_no_perm(user_perm_view_add_delete_client, add_client):
+    client = Client()
+    client.force_login(user_perm_view_add_delete_client)
+    response = client.get(reverse('client_edit', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_change_client_with_perm(user_perm_view_add_delete_change_client, add_client):
+    client = Client()
+    client.force_login(user_perm_view_add_delete_change_client)
+    a = {
+        'name': 'test_change'
+    }
+    response = client.post(reverse('client_edit', kwargs={'pk': add_client.pk}), data=a)
+    assert response.status_code == 302
+
+
+# COMPANY VIEWS TESTS
+
+def test_company_list_no_login():
+    client = Client()
+    response = client.get(reverse('component_list'))
+    assert response.status_code == 302
+
+# Order VIEWS TESTS
+
+# SwitchgearParameters VIEWS TESTS
+
+# Switchgear VIEWS TESTS
+
+# Component VIEWS TESTS
+
+# SwitchgearComponents VIEWS TESTS

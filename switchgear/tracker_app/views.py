@@ -32,6 +32,11 @@ class SignUpView(CreateView):
     template_name = 'registration/signup.html'
 
 
+    def form_invalid(self, form):
+        a = super().form_invalid(form)
+        return form
+
+
 class DetailCompanyView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_company']
     model = Company
