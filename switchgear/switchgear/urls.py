@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
+from switchgear import settings
 from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompanyView, WorkerDetailView, \
     WorkerUpdateView, SwitchgearListView, SwitchgearDetailView, SwitchgearCreateModelForm, SwitchgearUpdateView, \
     SwitchgearComponentsListView, SwitchgearComponentsCreateView, SwitchgearComponentsUpdateView, \
@@ -74,3 +76,6 @@ urlpatterns = [
     path('component/edit/<int:pk>/', ComponentUpdateView.as_view(), name='component_edit'),
     path('component/delete/<int:pk>/', ComponentDeleteView.as_view(), name='component_delete'),
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
