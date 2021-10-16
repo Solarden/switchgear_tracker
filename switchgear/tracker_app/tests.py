@@ -2,7 +2,7 @@ import pytest
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Client as ModelClient, Company, Order
+from .models import Client as ModelClient, Company, Order, SwitchgearParameters
 
 from tracker_app.models import Worker
 
@@ -349,10 +349,164 @@ def test_order_d_with_perm_post(user_perm_crud_order, add_order):
     with pytest.raises(ObjectDoesNotExist):
         Order.objects.get(pk=add_order.pk)
 
+
 # SwitchgearParameters VIEWS TESTS
+
+def test_switchgearparameters_list_no_login():
+    client = Client()
+    response = client.get(reverse('switchgear_parameters_list'))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_c_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_parameters_add'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_c_with_perm_get(user_perm_c_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_add'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_c_with_perm_post(user_perm_c_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    x = '1'
+    a = {
+        'name': x, 'par_a': x, 'par_ka': x, 'par_v': x, 'par_ui': x, 'par_hz': x, 'par_grid': x,
+        'par_protection': x, 'par_ip': x, 'par_ik': x
+    }
+    response = client.post(reverse('switchgear_parameters_add'), data=a)
+    assert response.status_code == 302
+    SwitchgearParameters.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_list_r_no_perm(user_perm_c_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_list'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_list_r_with_perm(user_perm_cr_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_list'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_list_get_not_empty(switchgearparameters, user_perm_cr_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearparameters)
+    response = client.get(reverse("switchgear_parameters_list"))
+    assert response.status_code == 200
+    object_list = response.context['object_list']
+    assert object_list.count() == len(switchgearparameters)
+    for item in switchgearparameters:
+        assert item in object_list
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_detail_r_no_perm(user_perm_c_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_detail', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_detail_r_with_perm(user_perm_cr_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_detail', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_u_no_perm(user_perm_c_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_edit', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_u_with_perm_get(user_perm_cru_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_cru_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_edit', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_u_with_perm_post(user_perm_cru_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_cru_switchgearparameters)
+    x = '2137'
+    a = {
+        'name': x, 'par_a': x, 'par_ka': x, 'par_v': x, 'par_ui': x, 'par_hz': x, 'par_grid': x,
+        'par_protection': x, 'par_ip': x, 'par_ik': x
+    }
+    response = client.post(reverse('switchgear_parameters_edit', kwargs={'pk': add_switchgearparameters.pk}), data=a)
+    assert response.status_code == 302
+    SwitchgearParameters.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_d_no_perm(user_perm_c_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_delete', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_d_with_perm_get(user_perm_crud_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearparameters)
+    response = client.get(reverse('switchgear_parameters_delete', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearparameters_d_with_perm_post(user_perm_crud_switchgearparameters, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearparameters)
+    response = client.post(reverse('switchgear_parameters_delete', kwargs={'pk': add_switchgearparameters.pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        Order.objects.get(pk=add_switchgearparameters.pk)
+
 
 # Switchgear VIEWS TESTS
 
+def test_switchgear_list_no_login():
+    client = Client()
+    response = client.get(reverse('switchgear_list'))
+    assert response.status_code == 302
+
+
 # Component VIEWS TESTS
 
+def test_component_list_no_login():
+    client = Client()
+    response = client.get(reverse('component_list'))
+    assert response.status_code == 302
+
+
 # SwitchgearComponents VIEWS TESTS
+
+def test_switchgearcomponents_no_login():
+    client = Client()
+    response = client.get(reverse('switchgear_components_add'))
+    assert response.status_code == 302

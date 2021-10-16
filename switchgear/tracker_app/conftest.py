@@ -203,7 +203,7 @@ def user_perm_crud_switchgearparameters():
 
 @pytest.fixture
 def add_switchgearparameters():
-    x = '1'
+    x = '12'
     return SwitchgearParameters.objects.create(name=x, par_a=x, par_ka=x, par_v=x, par_ui=x, par_hz=x, par_grid=x,
                                                par_protection=x, par_ip=x, par_ik=x)
 
