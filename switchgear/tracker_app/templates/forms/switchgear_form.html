@@ -18,25 +18,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     {{ form.switchgear_parameters.label }}
                     {{ form.switchgear_parameters }}
                 </div>
-                <div class="form-group col-md-6">
-                    {{ form.made_by.label }}
-                    {{ form.made_by }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     {{ form.req_shipment.label }}
                     {{ form.req_shipment }}
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     {{ form.actual_shipment.label }}
                     {{ form.actual_shipment }}
                 </div>
             </div>
+            {{ form.made_by.label }}
+            {{ form.made_by }}
             <div class="row justify-content-around">
                 <div class="col-3"></div>
                 <div class="col-3">
@@ -49,6 +45,7 @@
                 </div>
                 <div class="col-3"></div>
             </div>
+
             <br>
             <br>
             <p><input type="submit" value="Zapisz" class="btn btn-primary"></p>

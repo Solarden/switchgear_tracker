@@ -60,7 +60,7 @@ class Switchgear(models.Model):
     order_ref = models.ForeignKey(Order, on_delete=models.PROTECT)
     name = models.CharField(max_length=64)
     serial_no = models.CharField(max_length=32, unique=True)
-    switchgear_parameters = models.ManyToManyField(SwitchgearParameters)
+    switchgear_parameters = models.ForeignKey(SwitchgearParameters, on_delete=models.PROTECT)
     shipped = models.BooleanField(default=False)
     ready_to_ship = models.BooleanField(default=False)
     req_shipment = models.DateField(null=True, blank=True)

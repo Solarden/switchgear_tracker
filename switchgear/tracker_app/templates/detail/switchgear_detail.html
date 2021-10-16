@@ -9,8 +9,7 @@
             <li class="list-group-item text-center">Nazwa rozdzielni: {{ switchgear.name }}</li>
             <li class="list-group-item text-center">Numer seryjny: {{ switchgear.serial_no }}</li>
             <li class="list-group-item text-center">Charakterystyka rozdzielni:
-                {% for objs_switchgear in switchgear.switchgear_parameters.all %}
-                    <a href="{% url 'switchgear_parameters_detail' objs_switchgear.pk %}" class="link-dark">{{ objs_switchgear.name }}</a> {% endfor %}</li>
+                    <a href="{% url 'switchgear_parameters_detail' switchgear.switchgear_parameters.pk %}" class="link-dark">{{ switchgear.switchgear_parameters }}</a>
             <li class="list-group-item text-center">Status wysyłki: {% if switchgear.shipped %}
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                      class="bi bi-check-circle" color="green" viewBox="0 0 16 16">
