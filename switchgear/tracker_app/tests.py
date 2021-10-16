@@ -2,7 +2,8 @@ import pytest
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component
+from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component, \
+    SwitchgearComponents
 
 from tracker_app.models import Worker
 
@@ -74,7 +75,35 @@ def test_client_list_no_login():
 
 
 @pytest.mark.django_db
-def test_client_list_with_login_no_perm(user):
+def test_client_c_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('client_add'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_client_c_with_perm_get(user_perm_c_client):
+    client = Client()
+    client.force_login(user_perm_c_client)
+    response = client.get(reverse('client_add'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_client_c_with_perm_post(user_perm_c_client):
+    client = Client()
+    client.force_login(user_perm_c_client)
+    a = {
+        'name': 'line 90'
+    }
+    response = client.post(reverse('client_add'), data=a)
+    assert response.status_code == 302
+    ModelClient.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_client_list_r_no_perm(user):
     client = Client()
     client.force_login(user)
     response = client.get(reverse('client_list'))
@@ -82,17 +111,17 @@ def test_client_list_with_login_no_perm(user):
 
 
 @pytest.mark.django_db
-def test_client_list_with_login_and_perm(user_perm_view_client):
+def test_client_list_r_with_perm_get(user_perm_cr_client):
     client = Client()
-    client.force_login(user_perm_view_client)
+    client.force_login(user_perm_cr_client)
     response = client.get(reverse('client_list'))
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_client_list_get_not_empty(clients, user_perm_view_client):
+def test_client_list_r_get_not_empty(clients, user_perm_cr_client):
     client = Client()
-    client.force_login(user_perm_view_client)
+    client.force_login(user_perm_cr_client)
     response = client.get(reverse("client_list"))
     assert response.status_code == 200
     client_list = response.context['object_list']
@@ -102,64 +131,72 @@ def test_client_list_get_not_empty(clients, user_perm_view_client):
 
 
 @pytest.mark.django_db
-def test_add_client_post_no_perm(user_perm_view_client):
+def test_client_detail_r_no_perm(user, add_client):
     client = Client()
-    client.force_login(user_perm_view_client)
-    a = {
-        'name': 'pawel',
-    }
-    response = client.post(reverse('client_add'), data=a)
+    client.force_login(user)
+    response = client.get(reverse('client_detail', kwargs={'pk': add_client.pk}))
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_add_client_post_with_perm(user_perm_view_add_client):
+def test_client_detail_r_with_perm(user_perm_cr_client, add_client):
     client = Client()
-    client.force_login(user_perm_view_add_client)
-    a = {
-        'name': 'pawel',
-    }
-    response = client.post(reverse('client_add'), data=a)
-    assert response.status_code == 302
-    ModelClient.objects.get(**a)
+    client.force_login(user_perm_cr_client)
+    response = client.get(reverse('client_detail', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 200
 
 
 @pytest.mark.django_db
-def test_remove_client_no_perm(user_perm_view_add_client, add_client):
+def test_client_detail_u_no_perm(user_perm_cr_client, add_client):
     client = Client()
-    client.force_login(user_perm_view_add_client)
-    response = client.get(reverse("client_delete", kwargs={'pk': add_client.pk}))
-    assert response.status_code == 403
-
-
-@pytest.mark.django_db
-def test_delete_client_with_perm(user_perm_view_add_delete_client, add_client):
-    client = Client()
-    client.force_login(user_perm_view_add_delete_client)
-    response = client.post(reverse("client_delete", kwargs={'pk': add_client.pk}))
-    assert response.status_code == 302
-    with pytest.raises(ObjectDoesNotExist):
-        ModelClient.objects.get(pk=add_client.pk)
-
-
-@pytest.mark.django_db
-def test_change_client_with_no_perm(user_perm_view_add_delete_client, add_client):
-    client = Client()
-    client.force_login(user_perm_view_add_delete_client)
+    client.force_login(user_perm_cr_client)
     response = client.get(reverse('client_edit', kwargs={'pk': add_client.pk}))
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_change_client_with_perm(user_perm_view_add_delete_change_client, add_client):
+def test_client_detail_u_with_perm_get(user_perm_cru_client, add_client):
     client = Client()
-    client.force_login(user_perm_view_add_delete_change_client)
+    client.force_login(user_perm_cru_client)
+    response = client.get(reverse('client_edit', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_client_detail_u_with_perm_post(user_perm_cru_client, add_client):
+    client = Client()
+    client.force_login(user_perm_cru_client)
     a = {
-        'name': 'test_change'
+        'name': 'test line 100'
     }
     response = client.post(reverse('client_edit', kwargs={'pk': add_client.pk}), data=a)
     assert response.status_code == 302
-    ModelClient.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_client_detail_d_no_perm(user_perm_cr_client, add_client):
+    client = Client()
+    client.force_login(user_perm_cr_client)
+    response = client.get(reverse('client_delete', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_client_detail_d_with_perm_get(user_perm_crud_client, add_client):
+    client = Client()
+    client.force_login(user_perm_crud_client)
+    response = client.get(reverse('client_delete', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_client_detail_d_with_perm_post(user_perm_crud_client, add_client):
+    client = Client()
+    client.force_login(user_perm_crud_client)
+    response = client.post(reverse('client_delete', kwargs={'pk': add_client.pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        ModelClient.objects.get(pk=add_client.pk)
 
 
 # COMPANY VIEWS TESTS
@@ -752,3 +789,119 @@ def test_switchgearcomponents_no_login():
     client = Client()
     response = client.get(reverse('switchgear_components_add'))
     assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_components_add'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_c_with_perm_get(user_perm_c_switchgearcomponents):
+    client = Client()
+    client.force_login(user_perm_c_switchgearcomponents)
+    response = client.get(reverse('switchgear_components_add'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_c_with_perm_post(user_perm_c_switchgearcomponents, add_component, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_c_switchgearcomponents)
+    x = '1'
+    a = {
+        'component': add_component.pk, 'switchgear': add_switchgear.pk, 'amount_needed': x,
+        'amount_missing': x
+    }
+    response = client.post(reverse('switchgear_components_add'), data=a)
+    assert response.status_code == 302
+    SwitchgearComponents.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_r_no_perm(user, add_switchgearcomponents, add_switchgear):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_components_detail', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_r_no_perm(user_perm_cr_switchgearcomponents, add_switchgearcomponents, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearcomponents)
+    response = client.get(reverse('switchgear_components_detail', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_list_get_not_empty(user_perm_cr_switchgearcomponents,
+                                                 switchgearcomponents, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearcomponents)
+    response = client.get(reverse("switchgear_components_detail", kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 200
+    object_list = response.context['object_list']
+    assert object_list.count() == len(switchgearcomponents)
+    for item in switchgearcomponents:
+        assert item in object_list
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_u_no_perm(user, add_switchgearcomponents):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_components_edit', kwargs={'pk': add_switchgearcomponents.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_u_with_perm_get(user_perm_cru_switchgearcomponents, add_switchgearcomponents):
+    client = Client()
+    client.force_login(user_perm_cru_switchgearcomponents)
+    response = client.get(reverse('switchgear_components_edit', kwargs={'pk': add_switchgearcomponents.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_u_with_perm_post(user_perm_cru_switchgearcomponents, add_switchgearcomponents,
+                                               add_component, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_cru_switchgearcomponents)
+    x = '800'
+    a = {
+        'component': add_component.pk, 'switchgear': add_switchgear.pk, 'amount_needed': x,
+        'amount_missing': x
+    }
+    response = client.post(reverse('switchgear_components_edit', kwargs={'pk': add_switchgearcomponents.pk}), data=a)
+    assert response.status_code == 302
+    SwitchgearComponents.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_d_no_perm(user, add_switchgearcomponents):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_components_delete', kwargs={'pk': add_switchgearcomponents.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_d_with_perm_get(user_perm_crud_switchgearcomponents, add_switchgearcomponents):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearcomponents)
+    response = client.get(reverse('switchgear_components_delete', kwargs={'pk': add_switchgearcomponents.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearcomponents_d_with_perm_post(user_perm_crud_switchgearcomponents, add_switchgearcomponents):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearcomponents)
+    response = client.post(reverse('switchgear_components_delete', kwargs={'pk': add_switchgearcomponents.pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        SwitchgearComponents.objects.get(pk=add_switchgearcomponents.pk)

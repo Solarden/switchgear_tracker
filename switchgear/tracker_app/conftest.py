@@ -13,39 +13,39 @@ def user():
 # USER PERMS CLIENT
 
 @pytest.fixture
-def user_perm_view_client():
-    p = Permission.objects.get(codename='view_client')
-    u = Worker.objects.create(username='testowy')
+def user_perm_c_client():
+    p = Permission.objects.get(codename='add_client')
+    u = Worker.objects.create(username='test_user')
     u.user_permissions.add(p)
     return u
 
 
 @pytest.fixture
-def user_perm_view_add_client():
-    p = Permission.objects.get(codename='view_client')
-    p1 = Permission.objects.get(codename='add_client')
-    u = Worker.objects.create(username='testowy')
+def user_perm_cr_client():
+    p = Permission.objects.get(codename='add_client')
+    p1 = Permission.objects.get(codename='view_client')
+    u = Worker.objects.create(username='test_user')
     u.user_permissions.add(p, p1)
     return u
 
 
 @pytest.fixture
-def user_perm_view_add_delete_client():
-    p = Permission.objects.get(codename='view_client')
-    p1 = Permission.objects.get(codename='add_client')
-    p2 = Permission.objects.get(codename='delete_client')
-    u = Worker.objects.create(username='testowy')
+def user_perm_cru_client():
+    p = Permission.objects.get(codename='add_client')
+    p1 = Permission.objects.get(codename='view_client')
+    p2 = Permission.objects.get(codename='change_client')
+    u = Worker.objects.create(username='test_user')
     u.user_permissions.add(p, p1, p2)
     return u
 
 
 @pytest.fixture
-def user_perm_view_add_delete_change_client():
-    p = Permission.objects.get(codename='view_client')
-    p1 = Permission.objects.get(codename='add_client')
-    p2 = Permission.objects.get(codename='delete_client')
-    p3 = Permission.objects.get(codename='change_client')
-    u = Worker.objects.create(username='testowy')
+def user_perm_crud_client():
+    p = Permission.objects.get(codename='add_client')
+    p1 = Permission.objects.get(codename='view_client')
+    p2 = Permission.objects.get(codename='change_client')
+    p3 = Permission.objects.get(codename='delete_client')
+    u = Worker.objects.create(username='test_user')
     u.user_permissions.add(p, p1, p2, p3)
     return u
 
@@ -381,7 +381,7 @@ def add_switchgearcomponents(add_component, add_switchgear):
 
 
 @pytest.fixture
-def switchgearcomponents():
+def switchgearcomponents(add_component, add_switchgear):
     lst = []
     for x in range(10):
         lst.append(
