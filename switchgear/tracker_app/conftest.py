@@ -259,19 +259,22 @@ def user_perm_crud_switchgear():
 
 
 @pytest.fixture
-def add_switchgear(add_order, add_switchgearparameters, user):
+def add_switchgear(user, add_client, add_order, add_switchgearparameters):
     x = 'x'
-    return Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
-                                     switchgear_parameters=add_switchgearparameters, made_by=user)
+    switchgear_object = Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
+                                                  switchgear_parameters=add_switchgearparameters)
+    switchgear_object.made_by.add(user)
+    return switchgear_object
 
 
 @pytest.fixture
-def switchgears(add_order, add_switchgearparameters, user):
+def switchgears(user, add_client, add_order, add_switchgearparameters):
     lst = []
     for x in range(10):
-        lst.append(
-            Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
-                                      switchgear_parameters=add_switchgearparameters, made_by=user))
+        switchgear_object = Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
+                                                      switchgear_parameters=add_switchgearparameters)
+        switchgear_object.made_by.add(user)
+        lst.append(switchgear_object)
     return lst
 
 
