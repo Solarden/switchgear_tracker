@@ -1,7 +1,8 @@
 import pytest
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Client as ModelClient
+from .models import Client as ModelClient, Company
 
 from tracker_app.models import Worker
 
@@ -113,15 +114,10 @@ def test_add_client_post_with_perm(user_perm_view_add_client):
 
 
 @pytest.mark.django_db
-def test_remove_client_no_perm(user_perm_view_add_client):
+def test_remove_client_no_perm(user_perm_view_add_client, add_client):
     client = Client()
     client.force_login(user_perm_view_add_client)
-    a = {
-        'name': 'pawel',
-    }
-    response = client.post(reverse('client_add'), data=a)
-    assert response.status_code == 302
-    response = client.get(reverse("client_delete", kwargs={'pk': 1}))
+    response = client.get(reverse("client_delete", kwargs={'pk': add_client.pk}))
     assert response.status_code == 403
 
 
@@ -131,6 +127,8 @@ def test_delete_client_with_perm(user_perm_view_add_delete_client, add_client):
     client.force_login(user_perm_view_add_delete_client)
     response = client.post(reverse("client_delete", kwargs={'pk': add_client.pk}))
     assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        ModelClient.objects.get(pk=add_client.pk)
 
 
 @pytest.mark.django_db
@@ -150,6 +148,7 @@ def test_change_client_with_perm(user_perm_view_add_delete_change_client, add_cl
     }
     response = client.post(reverse('client_edit', kwargs={'pk': add_client.pk}), data=a)
     assert response.status_code == 302
+    ModelClient.objects.get(**a)
 
 
 # COMPANY VIEWS TESTS
@@ -158,6 +157,51 @@ def test_company_list_no_login():
     client = Client()
     response = client.get(reverse('component_list'))
     assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_company_r_no_perm(user, add_company):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('company_detail', kwargs={'pk': add_company.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_company_r_with_perm(user_perm_cr_company, add_company):
+    client = Client()
+    client.force_login(user_perm_cr_company)
+    response = client.get(reverse('company_detail', kwargs={'pk': add_company.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_company_u_no_perm(user_perm_cr_company, add_company):
+    client = Client()
+    client.force_login(user_perm_cr_company)
+    response = client.get(reverse('company_edit', kwargs={'pk': add_company.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_company_u_with_perm_get(user_perm_cru_company, add_company):
+    client = Client()
+    client.force_login(user_perm_cru_company)
+    response = client.get(reverse('company_edit', kwargs={'pk': add_company.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_company_u_with_perm_post(user_perm_cru_company, add_company):
+    client = Client()
+    client.force_login(user_perm_cru_company)
+    a = {
+        'name': 'test', 'owner': 'test', 'nip': 'test', 'hq': 'test', 'prod': 'test', 'logo': 'test'
+    }
+    response = client.post(reverse('company_edit', kwargs={'pk': add_company.pk}), data=a)
+    assert response.status_code == 302
+    Company.objects.get(name='test')
+
 
 # Order VIEWS TESTS
 

@@ -11,7 +11,7 @@ class Company(models.Model):
     nip = models.CharField(max_length=13)
     hq = models.TextField()
     prod = models.TextField()
-    logo = models.FileField(storage=fs_logo)
+    logo = models.FileField(storage=fs_logo, null=True, blank=True)
 
     def __str__(self):
         return self.name
