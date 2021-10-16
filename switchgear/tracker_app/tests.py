@@ -2,7 +2,7 @@ import pytest
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Client as ModelClient, Company
+from .models import Client as ModelClient, Company, Order
 
 from tracker_app.models import Worker
 
@@ -204,6 +204,112 @@ def test_company_u_with_perm_post(user_perm_cru_company, add_company):
 
 
 # Order VIEWS TESTS
+
+def test_order_list_no_login():
+    client = Client()
+    response = client.get(reverse('order_list'))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_order_c_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('order_add'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_c_with_perm_get(user_perm_c_order):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    response = client.get(reverse('order_add'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_c_with_perm_post(user_perm_c_order, add_client):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    a = {
+        'order_name': 'x', 'ordered_by': add_client.pk, 'added_by': user_perm_c_order.pk
+    }
+    response = client.post(reverse('order_add'), data=a)
+    assert response.status_code == 302
+    Order.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_order_r_no_perm(user_perm_c_order, add_order):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    response = client.get(reverse('order_detail', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_r_with_perm(user_perm_cr_order, add_order):
+    client = Client()
+    client.force_login(user_perm_cr_order)
+    response = client.get(reverse('order_detail', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_u_no_perm(user_perm_cr_order, add_order):
+    client = Client()
+    client.force_login(user_perm_cr_order)
+    response = client.get(reverse('order_edit', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_u_with_perm_get(user_perm_cru_order, add_order):
+    client = Client()
+    client.force_login(user_perm_cru_order)
+    response = client.get(reverse('order_edit', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_u_with_perm_post(user_perm_cru_order, add_order, add_client):
+    client = Client()
+    client.force_login(user_perm_cru_order)
+    a = {
+        'order_name': 'test',
+        'ordered_by': add_client.pk,
+        'added_by': user_perm_cru_order.pk,
+    }
+    response = client.post(reverse('order_edit', kwargs={'pk': add_order.pk}), data=a)
+    assert response.status_code == 302
+    Order.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_order_d_no_perm(user_perm_cru_order, add_order):
+    client = Client()
+    client.force_login(user_perm_cru_order)
+    response = client.get(reverse('order_delete', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_d_with_perm_get(user_perm_crud_order, add_order):
+    client = Client()
+    client.force_login(user_perm_crud_order)
+    response = client.get(reverse('order_delete', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_d_with_perm_post(user_perm_crud_order, add_order):
+    client = Client()
+    client.force_login(user_perm_crud_order)
+    response = client.post(reverse('order_delete', kwargs={'pk': add_order.pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        Order.objects.get(pk=add_order.pk)
+
 
 # SwitchgearParameters VIEWS TESTS
 

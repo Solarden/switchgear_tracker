@@ -149,8 +149,8 @@ def user_perm_crud_order():
 
 
 @pytest.fixture
-def add_order():
-    return Order.objects.create(order_name='x', ordered_by='x', added_by='x')
+def add_order(user, add_client):
+    return Order.objects.create(order_name='x', ordered_by=add_client, added_by=user)
 
 
 @pytest.fixture
