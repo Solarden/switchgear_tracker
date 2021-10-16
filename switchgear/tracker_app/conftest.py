@@ -154,10 +154,10 @@ def add_order(user, add_client):
 
 
 @pytest.fixture
-def orders():
+def orders(user, add_client):
     lst = []
     for x in range(10):
-        lst.append(Order.objects.create(order_name=x, ordered_by=x, added_by=x))
+        lst.append(Order.objects.create(order_name=x, ordered_by=add_client, added_by=user))
     return lst
 
 
@@ -203,7 +203,7 @@ def user_perm_crud_switchgearparameters():
 
 @pytest.fixture
 def add_switchgearparameters():
-    x = 'x'
+    x = '1'
     return SwitchgearParameters.objects.create(name=x, par_a=x, par_ka=x, par_v=x, par_ui=x, par_hz=x, par_grid=x,
                                                par_protection=x, par_ip=x, par_ik=x)
 
@@ -259,18 +259,19 @@ def user_perm_crud_switchgear():
 
 
 @pytest.fixture
-def add_switchgear():
+def add_switchgear(add_order, add_switchgearparameters, user):
     x = 'x'
-    return Switchgear.objects.create(order_ref=x, name=x, serial_no=x, switchgear_parameters=x, made_by=x, components=x)
+    return Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
+                                     switchgear_parameters=add_switchgearparameters, made_by=user)
 
 
 @pytest.fixture
-def switchgears():
+def switchgears(add_order, add_switchgearparameters, user):
     lst = []
     for x in range(10):
         lst.append(
-            Switchgear.objects.create(order_ref=x, name=x, serial_no=x, switchgear_parameters=x, made_by=x,
-                                      components=x))
+            Switchgear.objects.create(order_ref=add_order, name=x, serial_no=x,
+                                      switchgear_parameters=add_switchgearparameters, made_by=user))
     return lst
 
 
@@ -370,17 +371,17 @@ def user_perm_crud_switchgearcomponents():
 
 
 @pytest.fixture
-def add_switchgear():
-    x = 'x'
-    return SwitchgearComponents.objects.create(component=x, switchgear=x, amount_needed=x, amount_missing=x,
-                                               serial_number=x, supplier=x)
+def add_switchgearcomponents(add_component, add_switchgear):
+    x = '1'
+    return SwitchgearComponents.objects.create(component=add_component, switchgear=add_switchgear, amount_needed=x,
+                                               amount_missing=x)
 
 
 @pytest.fixture
-def switchgears():
+def switchgearcomponents():
     lst = []
     for x in range(10):
         lst.append(
-            SwitchgearComponents.objects.create(component=x, switchgear=x, amount_needed=x, amount_missing=x,
-                                                serial_number=x, supplier=x))
+            SwitchgearComponents.objects.create(component=add_component, switchgear=add_switchgear, amount_needed=x,
+                                                amount_missing=x))
     return lst

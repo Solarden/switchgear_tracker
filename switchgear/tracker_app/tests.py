@@ -102,6 +102,17 @@ def test_client_list_get_not_empty(clients, user_perm_view_client):
 
 
 @pytest.mark.django_db
+def test_add_client_post_no_perm(user_perm_view_client):
+    client = Client()
+    client.force_login(user_perm_view_client)
+    a = {
+        'name': 'pawel',
+    }
+    response = client.post(reverse('client_add'), data=a)
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
 def test_add_client_post_with_perm(user_perm_view_add_client):
     client = Client()
     client.force_login(user_perm_view_add_client)
@@ -240,7 +251,35 @@ def test_order_c_with_perm_post(user_perm_c_order, add_client):
 
 
 @pytest.mark.django_db
-def test_order_r_no_perm(user_perm_c_order, add_order):
+def test_order_list_r_no_perm(user_perm_c_order, add_order):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    response = client.get(reverse('order_list'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_list_r_with_perm(user_perm_cr_order, add_order):
+    client = Client()
+    client.force_login(user_perm_cr_order)
+    response = client.get(reverse('order_list'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_client_list_get_not_empty(orders, user_perm_cr_order):
+    client = Client()
+    client.force_login(user_perm_cr_order)
+    response = client.get(reverse("order_list"))
+    assert response.status_code == 200
+    client_list = response.context['object_list']
+    assert client_list.count() == len(orders)
+    for client in orders:
+        assert client in client_list
+
+
+@pytest.mark.django_db
+def test_order_detail_r_no_perm(user_perm_c_order, add_order):
     client = Client()
     client.force_login(user_perm_c_order)
     response = client.get(reverse('order_detail', kwargs={'pk': add_order.pk}))
@@ -248,7 +287,7 @@ def test_order_r_no_perm(user_perm_c_order, add_order):
 
 
 @pytest.mark.django_db
-def test_order_r_with_perm(user_perm_cr_order, add_order):
+def test_order_detail_r_with_perm(user_perm_cr_order, add_order):
     client = Client()
     client.force_login(user_perm_cr_order)
     response = client.get(reverse('order_detail', kwargs={'pk': add_order.pk}))
@@ -309,7 +348,6 @@ def test_order_d_with_perm_post(user_perm_crud_order, add_order):
     assert response.status_code == 302
     with pytest.raises(ObjectDoesNotExist):
         Order.objects.get(pk=add_order.pk)
-
 
 # SwitchgearParameters VIEWS TESTS
 
