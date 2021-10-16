@@ -2,7 +2,7 @@ import pytest
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear
+from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component
 
 from tracker_app.models import Worker
 
@@ -632,6 +632,118 @@ def test_component_list_no_login():
     client = Client()
     response = client.get(reverse('component_list'))
     assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_component_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('component_add'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_component_c_with_perm_get(user_perm_c_component):
+    client = Client()
+    client.force_login(user_perm_c_component)
+    response = client.get(reverse('component_add'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_component_c_with_perm_post(user_perm_c_component):
+    client = Client()
+    client.force_login(user_perm_c_component)
+    x = 'siema'
+    a = {
+        'name': x, 'producer': x, 'catalogue_number': x
+    }
+    response = client.post(reverse('component_add'), data=a)
+    assert response.status_code == 302
+    Component.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_component_list_r_no_perm(user_perm_c_component):
+    client = Client()
+    client.force_login(user_perm_c_component)
+    response = client.get(reverse('component_list'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_component_list_r_with_perm_get(user_perm_cr_component):
+    client = Client()
+    client.force_login(user_perm_cr_component)
+    response = client.get(reverse('component_list'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_component_list_get_not_empty(components, user_perm_cr_component):
+    client = Client()
+    client.force_login(user_perm_cr_component)
+    response = client.get(reverse("component_list"))
+    assert response.status_code == 200
+    object_list = response.context['object_list']
+    assert object_list.count() == len(components)
+    for item in components:
+        assert item in object_list
+
+
+@pytest.mark.django_db
+def test_component_u_no_perm(user_perm_c_component, add_component):
+    client = Client()
+    client.force_login(user_perm_c_component)
+    response = client.get(reverse('component_edit', kwargs={'pk': add_component.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_component_u_with_perm_get(user_perm_cru_component, add_component):
+    client = Client()
+    client.force_login(user_perm_cru_component)
+    response = client.get(reverse('component_edit', kwargs={'pk': add_component.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_component_u_with_perm_post(user_perm_cru_component, add_component):
+    client = Client()
+    client.force_login(user_perm_cru_component)
+    x = 'test 700 line'
+    a = {
+        'name': x, 'producer': x, 'catalogue_number': x
+    }
+    response = client.post(reverse('component_edit', kwargs={'pk': add_component.pk}), data=a)
+    assert response.status_code == 302
+    Component.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_component_d_no_perm(user_perm_c_component, add_component):
+    client = Client()
+    client.force_login(user_perm_c_component)
+    response = client.get(reverse('component_delete', kwargs={'pk': add_component.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_component_u_with_perm_get(user_perm_crud_component, add_component):
+    client = Client()
+    client.force_login(user_perm_crud_component)
+    response = client.get(reverse('component_delete', kwargs={'pk': add_component.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_component_u_with_perm_post(user_perm_crud_component, add_component):
+    client = Client()
+    client.force_login(user_perm_crud_component)
+    response = client.post(reverse('component_delete', kwargs={'pk': add_component.pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        Switchgear.objects.get(pk=add_component.pk)
 
 
 # SwitchgearComponents VIEWS TESTS
