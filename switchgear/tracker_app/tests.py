@@ -36,7 +36,7 @@ def test_signup(user):
 def test_signup_post_register():
     client = Client()
     a = {
-        'username': 'zajaczek',
+        'username': 'zajączek',
         'email': 'test@test.pl',
         'first_name': 'pawel',
         'last_name': 'testowy',
@@ -48,6 +48,73 @@ def test_signup_post_register():
     del a['password1']
     del a['password2']
     Worker.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_login_post(user):
+    client = Client()
+    a = {
+        'username': 'zajączek',
+        'email': 'test@test.pl',
+        'first_name': 'pawel',
+        'last_name': 'testowy',
+        'password1': 'tymczasowe!@#',
+        'password2': 'tymczasowe!@#',
+    }
+    response = client.post(reverse("signup"), data=a)
+    assert response.status_code == 302
+    b = {
+        'username': 'zajączek',
+        'password': 'tymczasowe!@#',
+    }
+    response = client.post(reverse("login"), data=b)
+    assert response.status_code == 302
+
+
+# WORKER VIEW TESTS
+
+@pytest.mark.django_db
+def test_worker_detail_no_login(user):
+    client = Client()
+    response = client.get(reverse('worker_detail', kwargs={'pk': user.pk}))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_worker_detail_r_logged_in(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('worker_detail', kwargs={'pk': user.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_worker_u_no_login(user):
+    client = Client()
+    response = client.get(reverse('worker_edit', kwargs={'pk': user.pk}))
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_worker_u_with_login_get(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('worker_edit', kwargs={'pk': user.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_worker_u_with_login_post(user):
+    client = Client()
+    client.force_login(user)
+    a = {
+        'username': 'line100',
+        'email': 'test@test.pl',
+        'first_name': 'janek',
+        'last_name': 'testowy',
+    }
+    response = client.post(reverse('worker_edit', kwargs={'pk': user.pk}), data=a)
+    assert response.status_code == 302
 
 
 # HOME VIEW TESTS
