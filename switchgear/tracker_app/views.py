@@ -31,7 +31,6 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
-
     def form_invalid(self, form):
         a = super().form_invalid(form)
         return form
@@ -62,13 +61,15 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
     model = Worker
     form_class = WorkerChangeForm
     template_name = 'forms/worker_form.html'
-    success_url = '/worker/'
 
     def test_func(self):
         if self.request.user.pk == int(self.kwargs['pk']):
             return True
         else:
             raise Http404
+
+    def get_success_url(self):
+        return reverse_lazy('worker_detail', kwargs={'pk': self.object.pk})
 
 
 class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
@@ -111,7 +112,9 @@ class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
     model = Switchgear
     form_class = SwitchgearModelForm
     template_name = 'forms/switchgear_form.html'
-    success_url = '/switchgear/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_detail', kwargs={'pk': self.object.pk})
 
 
 class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
@@ -119,7 +122,9 @@ class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     model = Switchgear
     template_name = 'forms/switchgear_form.html'
     form_class = SwitchgearModelForm
-    success_url = '/switchgear/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_detail', kwargs={'pk': self.object.pk})
 
 
 class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
@@ -146,7 +151,9 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
     model = SwitchgearComponents
     template_name = 'forms/form.html'
     form_class = SwitchgearComponentsModelForm
-    success_url = '/switchgear/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_components_detail', kwargs={'switchgear_id': self.object.switchgear.pk})
 
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
@@ -154,7 +161,9 @@ class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     model = SwitchgearComponents
     form_class = SwitchgearComponentsModelForm
     template_name = 'forms/form.html'
-    success_url = '/switchgear/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_components_detail', kwargs={'switchgear_id': self.object.switchgear.pk})
 
 
 class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
@@ -169,7 +178,9 @@ class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
     model = SwitchgearParameters
     template_name = 'forms/switchgear_parameters_form.html'
     form_class = SwitchgearParametersModelForm
-    success_url = '/switchgear/parameters/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_parameters_detail', kwargs={'pk': self.object.pk})
 
 
 class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
@@ -183,7 +194,9 @@ class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
     model = SwitchgearParameters
     template_name = 'forms/switchgear_parameters_form.html'
     form_class = SwitchgearParametersModelForm
-    success_url = '/switchgear/parameters/'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_parameters_detail', kwargs={'pk': self.object.pk})
 
 
 class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
@@ -206,7 +219,9 @@ class ClientCreateView(PermissionRequiredMixin, CreateView):
     model = Client
     template_name = 'forms/form.html'
     form_class = ClientModelForm
-    success_url = '/client/'
+
+    def get_success_url(self):
+        return reverse_lazy('client_detail', kwargs={'pk': self.object.pk})
 
 
 class ClientUpdateView(PermissionRequiredMixin, UpdateView):
@@ -214,7 +229,9 @@ class ClientUpdateView(PermissionRequiredMixin, UpdateView):
     model = Client
     template_name = 'forms/form.html'
     form_class = ClientModelForm
-    success_url = '/client/'
+
+    def get_success_url(self):
+        return reverse_lazy('client_detail', kwargs={'pk': self.object.pk})
 
 
 class ClientDeleteView(PermissionRequiredMixin, DeleteView):
@@ -248,7 +265,9 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
     model = Order
     template_name = 'forms/form.html'
     form_class = OrderModelForm
-    success_url = '/order/'
+
+    def get_success_url(self):
+        return reverse_lazy('order_detail', kwargs={'pk': self.object.pk})
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
@@ -268,7 +287,9 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     model = Order
     template_name = 'forms/form.html'
     form_class = OrderModelForm
-    success_url = '/order/'
+
+    def get_success_url(self):
+        return reverse_lazy('order_detail', kwargs={'pk': self.object.pk})
 
 
 class OrderDeleteView(PermissionRequiredMixin, DeleteView):
