@@ -145,6 +145,11 @@ class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
     def get_queryset(self):
         return SwitchgearComponents.objects.filter(switchgear_id=self.kwargs['switchgear_id'])
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['main_switchgear'] = Switchgear.objects.filter(pk=self.kwargs['switchgear_id'])
+        return context
+
 
 class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_switchgearcomponents']
@@ -155,6 +160,11 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_components_detail', kwargs={'switchgear_id': self.object.switchgear.pk})
 
+    def get_initial(self):
+        switchgear = Switchgear.objects.get(pk=self.kwargs['switchgear_id'])
+        return {
+            'switchgear': switchgear,
+        }
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgearcomponents']

@@ -19,12 +19,12 @@
                 <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>
             </div>
             <div class="col-md-3">
-                <a href="{% url 'switchgear_components_add' %}">
+                <a href="{% url 'switchgear_components_add' main_switchgear.0.pk %}">
                     <button class="btn btn-success">Dodaj nowy komponent do rozdzielni</button>
                 </a>
             </div>
         </div>
-        <h3 class="text-center">Komponenty {{ switchgear_id.0.switchgear }}:</h3>
+        <h3 class="text-center">Komponenty {{ main_switchgear.0.name }}:</h3>
         <table class="table table-striped">
             <thead>
             <tr>
