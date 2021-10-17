@@ -1,11 +1,11 @@
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
-from django.test import TestCase, Client
+from django.test import Client
 from django.urls import reverse
-from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component, \
-    SwitchgearComponents
 
 from tracker_app.models import Worker
+from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component, \
+    SwitchgearComponents
 
 
 # LOGIN/SIGNUP VIEWS TESTS
