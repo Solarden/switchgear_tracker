@@ -443,6 +443,32 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
         context['company'] = Company.objects.get(pk=1)
         return context
 
+    def get_initial(self):
+        return {
+            'added_by': self.request.user
+        }
+
+
+class OrderCreateViewPassingClient(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_order']
+    model = Order
+    template_name = 'forms/form.html'
+    form_class = OrderModelForm
+
+    def get_success_url(self):
+        return reverse_lazy('order_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
+    def get_initial(self):
+        client = Client.objects.get(pk=self.kwargs['client_id'])
+        return {
+            'ordered_by': client,
+            'added_by': self.request.user
+        }
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_order']

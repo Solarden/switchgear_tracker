@@ -3,6 +3,16 @@
 {% load groupfilter %}
 {% block content %}
     <div class="container">
+        <div class="row ms-auto">
+            <div class="col-md-9">
+{#                <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>#}
+            </div>
+            <div class="col-md-3">
+                {% if request.user|group:"biuro,admin" %}<a href="{% url 'order_add_client_pass' client.pk %}">
+                    <button class="btn btn-success">Dodaj nowe zamówienie</button>
+                </a>{% endif %}
+            </div>
+        </div>
         <h3 class="text-center">Zamówienia klienta {{ client }}:</h3>
         <table class="table table-striped">
             <thead>
