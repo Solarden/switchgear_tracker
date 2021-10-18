@@ -14,7 +14,7 @@
 <div class="container">
     <nav class="navbar navbar-expand-md navbar-light">
         <a href="{% url 'home' %}" class="navbar-brand">
-            <img src="{% static 'logos/rgt_logo.jpeg' %}" width="150px">
+            {% if company.logo %}<img src="{{ company.logo.url }}" width="150px">{% else %}Tracker app{% endif %}
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#toggleMobileMenu"
                 aria-controls="toggleMobileMenu" aria-expanded="false" aria-label="Toggle navigation">

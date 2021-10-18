@@ -23,7 +23,9 @@ class Main(LoginRequiredMixin, View):
         clients = Client.objects.all().count()
         orders = Order.objects.all().count()
         switchgears = Switchgear.objects.all().count()
-        return render(request, 'home.html', {'clients': clients, 'orders': orders, 'switchgears': switchgears})
+        company = Company.objects.get(pk=1)
+        return render(request, 'home.html',
+                      {'clients': clients, 'orders': orders, 'switchgears': switchgears, 'company': company})
 
 
 class SignUpView(CreateView):
@@ -35,11 +37,21 @@ class SignUpView(CreateView):
         a = super().form_invalid(form)
         return form
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class DetailCompanyView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_company']
     model = Company
     template_name = 'company.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class UpdateCompanyView(PermissionRequiredMixin, UpdateView):
@@ -49,6 +61,11 @@ class UpdateCompanyView(PermissionRequiredMixin, UpdateView):
     template_name = 'forms/form.html'
     success_url = '/company/1/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class WorkerListView(PermissionRequiredMixin, FilterView):
     permission_required = ['tracker_app.view_worker']
@@ -57,17 +74,32 @@ class WorkerListView(PermissionRequiredMixin, FilterView):
     filterset_class = WorkerFilter
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class AdminWorkerDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_worker']
     model = Worker
     template_name = 'detail/admin_worker.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class WorkerDetailView(LoginRequiredMixin, DetailView):
     login_url = 'login'
     model = Worker
     template_name = 'worker.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class WorkerUpdateView(UserPassesTestMixin, UpdateView):
@@ -85,6 +117,11 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('worker_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class AdminWorkerUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_worker']
@@ -94,6 +131,11 @@ class AdminWorkerUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('admin_worker_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
@@ -115,6 +157,11 @@ class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
         update_session_auth_hash(self.request, form.user)
         return super(WorkerPasswordChangeFormView, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearListView(PermissionRequiredMixin, FilterView):
     permission_required = ['tracker_app.view_switchgear']
@@ -124,11 +171,21 @@ class SwitchgearListView(PermissionRequiredMixin, FilterView):
     filterset_class = SwitchgearFilter
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_switchgear']
     model = Switchgear
     template_name = 'detail/switchgear_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
@@ -140,6 +197,11 @@ class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_switchgear']
@@ -150,12 +212,22 @@ class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_switchgear']
     model = Switchgear
     success_url = '/switchgear/'
     template_name = 'delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
@@ -172,6 +244,7 @@ class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['main_switchgear'] = Switchgear.objects.filter(pk=self.kwargs['switchgear_id'])
+        context['company'] = Company.objects.get(pk=1)
         return context
 
 
@@ -190,6 +263,11 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
             'switchgear': switchgear,
         }
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgearcomponents']
@@ -200,12 +278,22 @@ class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_components_detail', kwargs={'switchgear_id': self.object.switchgear.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_switchgearcomponents']
     model = SwitchgearComponents
     success_url = '/switchgear/'
     template_name = 'delete.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
@@ -217,11 +305,21 @@ class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_parameters_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_switchgearparameters']
     model = SwitchgearParameters
     template_name = 'detail/switchgear_parameters_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
@@ -233,12 +331,22 @@ class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('switchgear_parameters_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_switchgearparameters']
     model = SwitchgearParameters
     template_name = 'delete.html'
     success_url = '/switchgear/parameters/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
@@ -247,6 +355,11 @@ class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
     template_name = 'list/switchgear_parameters_list.html'
     filterset_class = SwitchgearParametersFilter
     paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class ClientCreateView(PermissionRequiredMixin, CreateView):
@@ -258,6 +371,11 @@ class ClientCreateView(PermissionRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse_lazy('client_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class ClientUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_client']
@@ -268,12 +386,22 @@ class ClientUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('client_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class ClientDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_client']
     model = Client
     template_name = 'delete.html'
     success_url = '/client/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class ClientDetailView(PermissionRequiredMixin, DetailView):
@@ -284,6 +412,7 @@ class ClientDetailView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['orders'] = Order.objects.all().filter(ordered_by=self.object)
+        context['company'] = Company.objects.get(pk=1)
         return context
 
 
@@ -294,6 +423,11 @@ class ClientListView(PermissionRequiredMixin, FilterView):
     filterset_class = ClientFilter
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class OrderCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_order']
@@ -303,6 +437,11 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('order_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class OrderDetailView(PermissionRequiredMixin, DetailView):
@@ -326,12 +465,22 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('order_detail', kwargs={'pk': self.object.pk})
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class OrderDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_order']
     model = Order
     template_name = 'delete.html'
     success_url = '/order/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class OrderListView(PermissionRequiredMixin, FilterView):
@@ -341,6 +490,11 @@ class OrderListView(PermissionRequiredMixin, FilterView):
     filterset_class = OrderFilter
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class ComponentCreateView(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_component']
@@ -348,6 +502,11 @@ class ComponentCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'forms/form.html'
     form_class = ComponentModelForm
     success_url = '/component/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
@@ -357,12 +516,22 @@ class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = ComponentModelForm
     success_url = '/component/'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
 
 class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_component']
     model = Component
     template_name = 'delete.html'
     success_url = '/component/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
 
 
 class ComponentListView(PermissionRequiredMixin, FilterView):
@@ -371,3 +540,8 @@ class ComponentListView(PermissionRequiredMixin, FilterView):
     template_name = 'list/component_list.html'
     filterset_class = ComponentFilter
     paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context

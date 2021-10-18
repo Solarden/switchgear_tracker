@@ -3,9 +3,6 @@
 {% load static %}
 {% block content %}
     <div class="container">
-        <img src="{% static 'logos/rgt_logo.jpeg' %}" width="100px">
-        <img src="{{ company.logo.url }}" width="100px">
-        {{ company.logo.url }}
         <h3 class="text-center">Dane firmy:</h3>
         <ul class="list-group list-group-flush">
             <li class="list-group-item text-center">Nazwa firmy: {{ company.name }}</li>
