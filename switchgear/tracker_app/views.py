@@ -218,6 +218,27 @@ class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
         return context
 
 
+class SwitchgearCreateModelFormPassingOrder(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_switchgear']
+    model = Switchgear
+    template_name = 'forms/switchgear_form.html'
+    form_class = SwitchgearModelForm
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_detail', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['company'] = Company.objects.get(pk=1)
+        return context
+
+    def get_initial(self):
+        order = Client.objects.get(pk=self.kwargs['order_id'])
+        return {
+            'order_ref': order,
+        }
+
+
 class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ['tracker_app.delete_switchgear']
     model = Switchgear
@@ -470,6 +491,7 @@ class OrderCreateViewPassingClient(PermissionRequiredMixin, CreateView):
             'added_by': self.request.user
         }
 
+
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_order']
     login_url = 'login'
@@ -479,6 +501,7 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['switchgears'] = Switchgear.objects.all().filter(order_ref=self.object)
+        context['company'] = Company.objects.get(pk=1)
         return context
 
 

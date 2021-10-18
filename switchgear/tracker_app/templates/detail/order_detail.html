@@ -21,6 +21,16 @@
             {% endif %}
         </div>
     <br>
+    <div class="row ms-auto">
+            <div class="col-md-10">
+{#                <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>#}
+            </div>
+            <div class="col-md-2">
+                {% if request.user|group:"biuro,admin" %}<a href="{% url 'switchgear_add_order_pass' order.pk %}">
+                    <button class="btn btn-success">Dodaj nową rozdzielnię</button>
+                </a>{% endif %}
+            </div>
+        </div>
     <h3 class="text-center">Rozdzielnie należącego do tego zamówienia:</h3>
         <table class="table table-striped">
             <thead>

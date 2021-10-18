@@ -27,7 +27,7 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView, \
     OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView, \
     WorkerPasswordChangeFormView, ClientDetailView, WorkerListView, AdminWorkerDetailView, AdminWorkerUpdateView, \
-    OrderCreateViewPassingClient
+    OrderCreateViewPassingClient, SwitchgearCreateModelFormPassingOrder
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,6 +48,8 @@ urlpatterns = [
     path('switchgear/', SwitchgearListView.as_view(), name='switchgear_list'),
     path('switchgear/<int:pk>/', SwitchgearDetailView.as_view(), name='switchgear_detail'),
     path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
+    path('switchgear/<int:order_id>/add/', SwitchgearCreateModelFormPassingOrder.as_view(),
+         name='switchgear_add_order_pass'),
     path('switchgear/edit/<int:pk>/', SwitchgearUpdateView.as_view(), name='switchgear_edit'),
     path('switchgear/delete/<int:pk>/', SwitchgearDeleteView.as_view(), name='switchgear_delete'),
     path('switchgear/components/<int:switchgear_id>/', SwitchgearComponentsListView.as_view(),
