@@ -67,6 +67,7 @@ class Switchgear(models.Model):
     actual_shipment = models.DateField(null=True, blank=True)
     made_by = models.ManyToManyField(Worker)
     components = models.ManyToManyField('Component', through='SwitchgearComponents')
+    stuff_missing = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

@@ -47,13 +47,15 @@
                     <td>{% if switchgear.supplier is None %}Nie określono{% else %}
                         {{ switchgear.supplier }}{% endif %}</td>
                     <td>{{ switchgear.amount_needed }}</td>
-                    <td>{{ switchgear.amount_missing }}</td>
+                    <td>{% if switchgear.amount_missing > 0 %}
+                        <a href="#" class="link-danger">{{ switchgear.amount_missing }}</a>{% else %}
+                        {{ switchgear.amount_missing }}{% endif %}</td>
                     <td><a href="{% url 'switchgear_components_edit' switchgear.pk %}">
                         <button type="button" class="btn btn-primary btn-sm">Edytuj</button></a>
                         {% if request.user|group:"biuro,admin" %}
                             <a href="{% url 'switchgear_components_delete' switchgear.pk %}">
-                            <button type="button" class="btn btn-danger btn-sm">Usuń</button>
-                        </a>{% endif %}
+                                <button type="button" class="btn btn-danger btn-sm">Usuń</button>
+                            </a>{% endif %}
                     </td>
                 </tr>
             {% endfor %}
@@ -78,7 +80,8 @@
                                 <span class="page-link">{{ n }}<span class="sr-only"></span></span>
                             </li>
                         {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
-                            <li class="page-item"><a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a></li>
+                            <li class="page-item"><a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a>
+                            </li>
                         {% endif %}
                     {% endfor %}
                     {% if page_obj.has_next %}

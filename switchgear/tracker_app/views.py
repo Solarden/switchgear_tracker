@@ -1,7 +1,7 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
@@ -278,7 +278,6 @@ class SwitchgearCreateModelFormPassingOrder(PermissionRequiredMixin, CreateView)
         except ObjectDoesNotExist:
             return context
 
-
     def get_initial(self):
         order = Client.objects.get(pk=self.kwargs['order_id'])
         return {
@@ -345,6 +344,15 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
         except ObjectDoesNotExist:
             return context
 
+    def form_valid(self, form):
+        missing = form.cleaned_data['amount_missing']
+        obj = form.cleaned_data['switchgear']
+        if missing > 0:
+            obj.stuff_missing = True
+            obj.save()
+        return super().form_valid(form)
+
+
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgearcomponents']
@@ -362,6 +370,24 @@ class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
             return context
         except ObjectDoesNotExist:
             return context
+
+    def form_valid(self, form):
+        obj = form.cleaned_data['switchgear']
+        check_sum = 0
+        check_lst = []
+        if form.cleaned_data['amount_missing'] == 0:
+            for item in SwitchgearComponents.objects.filter(switchgear=obj):
+                check_lst.append(item.amount_missing)
+            for x in check_lst:
+                if x == 0:
+                    check_sum += 1
+            if check_sum == len(check_lst) - 1:
+                obj.stuff_missing = False
+                obj.save()
+        else:
+            obj.stuff_missing = True
+            obj.save()
+        return super().form_valid(form)
 
 
 class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
