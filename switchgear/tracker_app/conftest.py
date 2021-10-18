@@ -7,7 +7,7 @@ from tracker_app.models import Worker, Client, Company, Order, SwitchgearParamet
 
 @pytest.fixture
 def user():
-    return Worker.objects.create(username='testowy', password='haslomaslo')
+    return Worker.objects.create(username='testowy')
 
 
 # USER PERMS CLIENT

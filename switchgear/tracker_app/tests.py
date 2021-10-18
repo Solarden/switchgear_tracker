@@ -852,25 +852,26 @@ def test_component_u_with_perm_post(user_perm_crud_component, add_component):
 
 # SwitchgearComponents VIEWS TESTS
 
-def test_switchgearcomponents_no_login():
+@pytest.mark.django_db
+def test_switchgearcomponents_no_login(add_switchgear):
     client = Client()
-    response = client.get(reverse('switchgear_components_add'))
+    response = client.get(reverse('switchgear_components_add', kwargs={'switchgear_id': add_switchgear.pk}))
     assert response.status_code == 302
 
 
 @pytest.mark.django_db
-def test_switchgearcomponents_no_perm(user):
+def test_switchgearcomponents_no_perm(user, add_switchgear):
     client = Client()
     client.force_login(user)
-    response = client.get(reverse('switchgear_components_add'))
+    response = client.get(reverse('switchgear_components_add', kwargs={'switchgear_id': add_switchgear.pk}))
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_switchgearcomponents_c_with_perm_get(user_perm_c_switchgearcomponents):
+def test_switchgearcomponents_c_with_perm_get(user_perm_c_switchgearcomponents, add_switchgear):
     client = Client()
     client.force_login(user_perm_c_switchgearcomponents)
-    response = client.get(reverse('switchgear_components_add'))
+    response = client.get(reverse('switchgear_components_add', kwargs={'switchgear_id': add_switchgear.pk}))
     assert response.status_code == 200
 
 
@@ -883,7 +884,7 @@ def test_switchgearcomponents_c_with_perm_post(user_perm_c_switchgearcomponents,
         'component': add_component.pk, 'switchgear': add_switchgear.pk, 'amount_needed': x,
         'amount_missing': x
     }
-    response = client.post(reverse('switchgear_components_add'), data=a)
+    response = client.post(reverse('switchgear_components_add', kwargs={'switchgear_id': add_switchgear.pk}), data=a)
     assert response.status_code == 302
     SwitchgearComponents.objects.get(**a)
 

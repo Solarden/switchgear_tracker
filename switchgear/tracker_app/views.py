@@ -1,5 +1,6 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -23,7 +24,10 @@ class Main(LoginRequiredMixin, View):
         clients = Client.objects.all().count()
         orders = Order.objects.all().count()
         switchgears = Switchgear.objects.all().count()
-        company = Company.objects.get(pk=1)
+        try:
+            company = Company.objects.get(pk=1)
+        except ObjectDoesNotExist:
+            company = ''
         return render(request, 'home.html',
                       {'clients': clients, 'orders': orders, 'switchgears': switchgears, 'company': company})
 
@@ -39,8 +43,11 @@ class SignUpView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class DetailCompanyView(PermissionRequiredMixin, DetailView):
@@ -50,8 +57,11 @@ class DetailCompanyView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class UpdateCompanyView(PermissionRequiredMixin, UpdateView):
@@ -63,8 +73,11 @@ class UpdateCompanyView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class WorkerListView(PermissionRequiredMixin, FilterView):
@@ -76,8 +89,11 @@ class WorkerListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class AdminWorkerDetailView(PermissionRequiredMixin, DetailView):
@@ -87,8 +103,11 @@ class AdminWorkerDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class WorkerDetailView(LoginRequiredMixin, DetailView):
@@ -98,8 +117,11 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class WorkerUpdateView(UserPassesTestMixin, UpdateView):
@@ -119,8 +141,11 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class AdminWorkerUpdateView(PermissionRequiredMixin, UpdateView):
@@ -134,8 +159,11 @@ class AdminWorkerUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
@@ -159,8 +187,11 @@ class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearListView(PermissionRequiredMixin, FilterView):
@@ -173,8 +204,11 @@ class SwitchgearListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearDetailView(PermissionRequiredMixin, DetailView):
@@ -184,8 +218,11 @@ class SwitchgearDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
@@ -199,8 +236,11 @@ class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
@@ -214,8 +254,11 @@ class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearCreateModelFormPassingOrder(PermissionRequiredMixin, CreateView):
@@ -229,8 +272,12 @@ class SwitchgearCreateModelFormPassingOrder(PermissionRequiredMixin, CreateView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
+
 
     def get_initial(self):
         order = Client.objects.get(pk=self.kwargs['order_id'])
@@ -247,8 +294,11 @@ class SwitchgearDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
@@ -265,8 +315,11 @@ class SwitchgearComponentsListView(PermissionRequiredMixin, FilterView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['main_switchgear'] = Switchgear.objects.filter(pk=self.kwargs['switchgear_id'])
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
@@ -286,8 +339,11 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
@@ -301,8 +357,11 @@ class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
@@ -313,8 +372,11 @@ class SwitchgearComponentsDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
@@ -328,8 +390,11 @@ class SwitchgearParametersCreateView(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
@@ -339,8 +404,11 @@ class SwitchgearParametersDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
@@ -354,8 +422,11 @@ class SwitchgearParametersUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
@@ -366,8 +437,11 @@ class SwitchgearParametersDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
@@ -379,8 +453,11 @@ class SwitchgearParametersListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ClientCreateView(PermissionRequiredMixin, CreateView):
@@ -394,8 +471,11 @@ class ClientCreateView(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ClientUpdateView(PermissionRequiredMixin, UpdateView):
@@ -409,8 +489,11 @@ class ClientUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ClientDeleteView(PermissionRequiredMixin, DeleteView):
@@ -421,8 +504,11 @@ class ClientDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ClientDetailView(PermissionRequiredMixin, DetailView):
@@ -433,8 +519,11 @@ class ClientDetailView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['orders'] = Order.objects.all().filter(ordered_by=self.object)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ClientListView(PermissionRequiredMixin, FilterView):
@@ -446,8 +535,11 @@ class ClientListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class OrderCreateView(PermissionRequiredMixin, CreateView):
@@ -461,8 +553,11 @@ class OrderCreateView(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
     def get_initial(self):
         return {
@@ -481,8 +576,11 @@ class OrderCreateViewPassingClient(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
     def get_initial(self):
         client = Client.objects.get(pk=self.kwargs['client_id'])
@@ -501,8 +599,11 @@ class OrderDetailView(PermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['switchgears'] = Switchgear.objects.all().filter(order_ref=self.object)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class OrderUpdateView(PermissionRequiredMixin, UpdateView):
@@ -516,8 +617,11 @@ class OrderUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class OrderDeleteView(PermissionRequiredMixin, DeleteView):
@@ -528,8 +632,11 @@ class OrderDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class OrderListView(PermissionRequiredMixin, FilterView):
@@ -541,8 +648,11 @@ class OrderListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ComponentCreateView(PermissionRequiredMixin, CreateView):
@@ -554,8 +664,11 @@ class ComponentCreateView(PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
@@ -567,8 +680,11 @@ class ComponentUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
@@ -579,8 +695,11 @@ class ComponentDeleteView(PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
 
 
 class ComponentListView(PermissionRequiredMixin, FilterView):
@@ -592,5 +711,8 @@ class ComponentListView(PermissionRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = Company.objects.get(pk=1)
-        return context
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
