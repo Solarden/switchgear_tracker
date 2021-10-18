@@ -8,10 +8,10 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView,
 from django_filters.views import FilterView
 
 from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter, SwitchgearParametersFilter, \
-    ClientFilter, OrderFilter, ComponentFilter
+    ClientFilter, OrderFilter, ComponentFilter, WorkerFilter
 from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
     SwitchgearComponentsModelForm, SwitchgearParametersModelForm, ClientModelForm, OrderModelForm, ComponentModelForm, \
-    WorkerPasswordChangeForm
+    WorkerPasswordChangeForm, AdminWorkerChangeForm
 from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
     Component
 
@@ -50,6 +50,20 @@ class UpdateCompanyView(PermissionRequiredMixin, UpdateView):
     success_url = '/company/1/'
 
 
+class WorkerListView(PermissionRequiredMixin, FilterView):
+    permission_required = ['tracker_app.view_worker']
+    model = Worker
+    template_name = 'list/worker_list.html'
+    filterset_class = WorkerFilter
+    paginate_by = 50
+
+
+class AdminWorkerDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = ['tracker_app.view_worker']
+    model = Worker
+    template_name = 'detail/admin_worker.html'
+
+
 class WorkerDetailView(LoginRequiredMixin, DetailView):
     login_url = 'login'
     model = Worker
@@ -70,6 +84,16 @@ class WorkerUpdateView(UserPassesTestMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('worker_detail', kwargs={'pk': self.object.pk})
+
+
+class AdminWorkerUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['tracker_app.change_worker']
+    model = Worker
+    form_class = AdminWorkerChangeForm
+    template_name = 'forms/admin_worker_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('admin_worker_detail', kwargs={'pk': self.object.pk})
 
 
 class WorkerPasswordChangeFormView(LoginRequiredMixin, FormView):
@@ -165,6 +189,7 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
         return {
             'switchgear': switchgear,
         }
+
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = ['tracker_app.change_switchgearcomponents']

@@ -26,7 +26,7 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearParametersUpdateView, SwitchgearParametersDeleteView, ClientListView, ClientCreateView, \
     SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView, \
     OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView, \
-    WorkerPasswordChangeFormView, ClientDetailView
+    WorkerPasswordChangeFormView, ClientDetailView, WorkerListView, AdminWorkerDetailView, AdminWorkerUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,6 +38,9 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path('company/<int:pk>/', DetailCompanyView.as_view(), name='company_detail'),
     path('company/edit/<int:pk>/', UpdateCompanyView.as_view(), name='company_edit'),
+    path('admin_worker/', WorkerListView.as_view(), name='worker_list'),
+    path('admin_worker/<int:pk>/', AdminWorkerDetailView.as_view(), name='admin_worker_detail'),
+    path('admin_worker/edit/<int:pk>/', AdminWorkerUpdateView.as_view(), name='admin_worker_edit'),
     path('worker/<int:pk>/', WorkerDetailView.as_view(), name='worker_detail'),
     path('worker/edit/<int:pk>/', WorkerUpdateView.as_view(), name='worker_edit'),
     path('worker/edit/password/', WorkerPasswordChangeFormView.as_view(), name='worker_edit_password'),

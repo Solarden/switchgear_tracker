@@ -38,6 +38,17 @@ class WorkerChangeForm(UserChangeForm):
         }
 
 
+class AdminWorkerChangeForm(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = Worker
+        fields = ('groups',)
+        widgets = {
+            'groups': forms.SelectMultiple(attrs={'class': 'form-control'}),
+        }
+
+
 class WorkerPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(
         widget=forms.TextInput(

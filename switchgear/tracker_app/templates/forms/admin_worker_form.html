@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Informacje dotyczące konta:</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Nazwa użytkownika: {{ worker }}</li>
+            <li class="list-group-item text-center">Imię i nazwisko: {{ worker.first_name }} {{ worker.last_name }}</li>
+            <li class="list-group-item text-center">Adres email: {{ worker.email }}</li>
+            <li class="list-group-item text-center">Aktualne grupy użytkownika:
+                {% for group in worker.groups.all %}{{ group }} {% endfor %}</li>
+        </ul>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.groups }}
+            <br>
+            <p><input type="submit" value="Zapisz" class="btn btn-primary"></p>
+        </form>
+        {% for message in messages %}
+            <p> {{ message }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

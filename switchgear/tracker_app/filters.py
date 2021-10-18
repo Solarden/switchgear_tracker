@@ -82,3 +82,19 @@ class ComponentFilter(django_filters.FilterSet):
     class Meta:
         model = Component
         fields = ('name', 'catalogue_number')
+
+
+class WorkerFilter(django_filters.FilterSet):
+    username = CharFilter(field_name='username', lookup_expr='icontains', label="Nazwa użytkownika:",
+                          widget=forms.TextInput(
+                              attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwę użytkownika'}))
+    first_name = CharFilter(field_name='first_name', lookup_expr='icontains', label="Imię użytkownika:",
+                            widget=forms.TextInput(
+                                attrs={'class': 'form-control', 'placeholder': 'Wprowadź imię użytkownika'}))
+    last_name = CharFilter(field_name='last_name', lookup_expr='icontains', label="Nazwisko użytkownika:",
+                           widget=forms.TextInput(
+                               attrs={'class': 'form-control', 'placeholder': 'Wprowadź nazwisko użytkownika'}))
+
+    class Meta:
+        model = Worker
+        fields = ('username', 'first_name', 'last_name')

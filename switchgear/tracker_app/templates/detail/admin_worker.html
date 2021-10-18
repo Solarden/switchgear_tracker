@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h3 class="text-center">Informacje dotyczące konta:</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item text-center">Nazwa użytkownika: {{ worker }}</li>
+            <li class="list-group-item text-center">Imię i nazwisko: {{ worker.first_name }} {{ worker.last_name }}</li>
+            <li class="list-group-item text-center">Adres email: {{ worker.email }}</li>
+            <li class="list-group-item text-center">Data dołączenia: {{ worker.date_joined }}</li>
+            <li class="list-group-item text-center">Ostatnio zalogowany: {{ worker.last_login }}</li>
+            <li class="list-group-item text-center">Aktualne grupy użytkownika:
+                {% for group in worker.groups.all %}{{ group }} {% endfor %}</li>
+        </ul>
+        <br>
+        <div class="text-center">
+            <a href="{% url 'admin_worker_edit' worker.pk %}">
+                <button type="button" class="btn btn-primary">Zmień grupę uprawnień</button></a>
+        </div>
+    </div>
+{% endblock %}

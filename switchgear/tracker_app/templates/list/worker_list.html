@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <form action="" method="get" id="search">
+            <div class="row">
+                <div class="form-group col-md-4"><label for="component">{{ filter.form.username.label }}</label>
+                    {{ filter.form.username }}
+                </div>
+                <div class="form-group col-md-4"><label for="component">{{ filter.form.first_name.label }}</label>
+                    {{ filter.form.first_name }}
+                </div>
+                <div class="form-group col-md-4"><label for="component">{{ filter.form.last_name.label }}</label>
+                    {{ filter.form.last_name }}
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="row ms-auto">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary" value="Szukaj" form="search">Szukaj</button>
+            </div>
+        </div>
+        <h3 class="text-center">Użytkownicy:</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Nazwa użytkownika</th>
+                <th scope="col">Imię użytkownika</th>
+                <th scope="col">Nazwisko użytkownika</th>
+                <th scope="col">Ostatnio zalogowany</th>
+                <th scope="col">Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in object_list %}
+                <tr>
+                    <td><a href="{% url 'admin_worker_detail' item.pk %}" class="link-dark">{{ item.username }}</a></td>
+                    <td>{{ item.first_name }}</td>
+                    <td>{{ item.last_name }}</td>
+                    <td>{% if item.last_login is None %}Nigdy{% else %}{{ item.last_login }}{% endif %}</td>
+                    <td><a href="{% url 'admin_worker_edit' item.pk %}">
+                        <button type="button" class="btn btn-primary btn-sm">Edytuj grupę uprawnień</button></a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% load my_tags %}
+        {% if is_paginated %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=1 %}">Pierwsza</a></li>
+                        {% if page_obj.previous_page_number != 1 %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.previous_page_number %}">&laquo;
+                                Poprzednia</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% for n in page_obj.paginator.page_range %}
+                        {% if page_obj.number == n %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ n }}<span class="sr-only"></span></span>
+                            </li>
+                        {% elif n > page_obj.number|add:'-5' and n < page_obj.number|add:'5' %}
+                            <li class="page-item"><a class="page-link" href="?{% param_replace page=n %}">{{ n }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        {% if page_obj.next_page_number != paginator.num_pages %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?{% param_replace page=page_obj.next_page_number %}">Następna
+                                &raquo;</a>
+                            </li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="?{% param_replace page=paginator.num_pages %}">Ostatnia</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+{% endblock %}
