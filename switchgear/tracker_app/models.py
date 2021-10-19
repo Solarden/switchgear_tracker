@@ -73,7 +73,7 @@ class Switchgear(models.Model):
     components = models.ManyToManyField('Component', through='SwitchgearComponents')
     stuff_missing = models.BooleanField(default=False)
     has_photos = models.BooleanField(default=False)
-    photos = models.ManyToManyField('SwitchgearPhotos')
+    photos = models.ManyToManyField('SwitchgearPhotos', blank=True)
 
     def __str__(self):
         return self.name
