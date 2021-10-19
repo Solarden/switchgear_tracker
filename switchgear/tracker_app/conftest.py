@@ -1,13 +1,50 @@
 import pytest
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, Group
 
 from tracker_app.models import Worker, Client, Company, Order, SwitchgearParameters, Switchgear, Component, \
-    SwitchgearComponents
+    SwitchgearComponents, SwitchgearPhotos
+from faker import Faker
 
+faker = Faker("pl_PL")
+
+
+# USE PERMS WORKER
 
 @pytest.fixture
 def user():
     return Worker.objects.create(username='testowy')
+
+
+@pytest.fixture
+def user_perm_cr_worker():
+    p = Permission.objects.get(codename='add_worker')
+    p1 = Permission.objects.get(codename='view_worker')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p, p1)
+    return u
+
+
+@pytest.fixture
+def user_perm_cru_worker():
+    p = Permission.objects.get(codename='add_worker')
+    p1 = Permission.objects.get(codename='view_worker')
+    p2 = Permission.objects.get(codename='change_worker')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p, p1, p2)
+    return u
+
+
+@pytest.fixture
+def workers():
+    lst = []
+    for x in range(10):
+        lst.append(Worker.objects.create(username=x))
+    return lst
+
+
+@pytest.fixture
+def add_group():
+    return Group.objects.create(name='testowy')
 
 
 # USER PERMS CLIENT
@@ -150,7 +187,7 @@ def user_perm_crud_order():
 
 @pytest.fixture
 def add_order(user, add_client):
-    return Order.objects.create(order_name='x', ordered_by=add_client, added_by=user)
+    return Order.objects.create(order_name=faker.text(max_nb_chars=10), ordered_by=add_client, added_by=user)
 
 
 @pytest.fixture
@@ -387,4 +424,52 @@ def switchgearcomponents(add_component, add_switchgear):
         lst.append(
             SwitchgearComponents.objects.create(component=add_component, switchgear=add_switchgear, amount_needed=x,
                                                 amount_missing=x))
+    return lst
+
+
+# USER PERMS SwitchgearPhotos
+
+@pytest.fixture
+def user_perm_c_switchgearphotos():
+    p = Permission.objects.get(codename='add_switchgearphotos')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p)
+    return u
+
+
+@pytest.fixture
+def user_perm_cr_switchgearphotos():
+    p = Permission.objects.get(codename='add_switchgearphotos')
+    p1 = Permission.objects.get(codename='view_switchgearphotos')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p, p1)
+    return u
+
+
+@pytest.fixture
+def user_perm_cru_switchgearphotos():
+    p = Permission.objects.get(codename='add_switchgearphotos')
+    p1 = Permission.objects.get(codename='view_switchgearphotos')
+    p2 = Permission.objects.get(codename='change_switchgearphotos')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p, p1, p2)
+    return u
+
+
+@pytest.fixture
+def user_perm_crud_switchgearphotos():
+    p = Permission.objects.get(codename='add_switchgearphotos')
+    p1 = Permission.objects.get(codename='view_switchgearphotos')
+    p2 = Permission.objects.get(codename='change_switchgearphotos')
+    p3 = Permission.objects.get(codename='delete_switchgearphotos')
+    u = Worker.objects.create(username='test_user')
+    u.user_permissions.add(p, p1, p2, p3)
+    return u
+
+
+@pytest.fixture
+def photos(user, add_switchgear):
+    lst = []
+    for x in range(10):
+        lst.append(SwitchgearPhotos.objects.create(ref_switchgear=add_switchgear, photo='x'))
     return lst

@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client
 from django.urls import reverse
 
-from tracker_app.models import Worker
+from tracker_app.models import Worker, SwitchgearPhotos
 from .models import Client as ModelClient, Company, Order, SwitchgearParameters, Switchgear, Component, \
     SwitchgearComponents
 
@@ -86,6 +86,77 @@ def test_worker_detail_r_logged_in(user):
     client.force_login(user)
     response = client.get(reverse('worker_detail', kwargs={'pk': user.pk}))
     assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_admin_worker_detail_r_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('admin_worker_detail', kwargs={'pk': user.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_admin_worker_detail_r_with_perm(user_perm_cr_worker):
+    client = Client()
+    client.force_login(user_perm_cr_worker)
+    response = client.get(reverse('worker_detail', kwargs={'pk': user_perm_cr_worker.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_admin_worker_u_no_perm_get(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('admin_worker_edit', kwargs={'pk': user.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_admin_worker_u_with_perm_get(user_perm_cru_worker):
+    client = Client()
+    client.force_login(user_perm_cru_worker)
+    response = client.get(reverse('admin_worker_edit', kwargs={'pk': user_perm_cru_worker.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_admin_worker_u_with_perm_post(user_perm_cru_worker, add_group):
+    client = Client()
+    client.force_login(user_perm_cru_worker)
+    a = {
+        'groups': add_group.pk
+    }
+    response = client.post(reverse('admin_worker_edit', kwargs={'pk': user_perm_cru_worker.pk}), data=a)
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_worker_admin_list_r_no_perm(user):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('worker_list'))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_worker_admin_list_r_with_perm(user_perm_cr_worker):
+    client = Client()
+    client.force_login(user_perm_cr_worker)
+    response = client.get(reverse('worker_list'))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_worker_admin_list_r_get_not_empty(user_perm_cr_worker, workers):
+    client = Client()
+    client.force_login(user_perm_cr_worker)
+    response = client.get(reverse("worker_list"))
+    assert response.status_code == 200
+    worker_list = response.context['object_list']
+    assert worker_list.count() - 1 == len(workers)
+    for worker in workers:
+        assert worker in worker_list
 
 
 @pytest.mark.django_db
@@ -355,6 +426,34 @@ def test_order_c_with_perm_post(user_perm_c_order, add_client):
 
 
 @pytest.mark.django_db
+def test_order_passing_client_c_no_perm(user, add_client):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('order_add_client_pass', kwargs={'client_id': add_client.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_order_passing_client_c_with_perm_get(user_perm_c_order, add_client):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    response = client.get(reverse('order_add_client_pass', kwargs={'client_id': add_client.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_order_passing_client_c_with_perm_post(user_perm_c_order, add_client):
+    client = Client()
+    client.force_login(user_perm_c_order)
+    a = {
+        'order_name': 'x', 'ordered_by': add_client.pk, 'added_by': user_perm_c_order.pk
+    }
+    response = client.post(reverse('order_add_client_pass', kwargs={'client_id': add_client.pk}), data=a)
+    assert response.status_code == 302
+    Order.objects.get(**a)
+
+
+@pytest.mark.django_db
 def test_order_list_r_no_perm(user_perm_c_order, add_order):
     client = Client()
     client.force_login(user_perm_c_order)
@@ -601,7 +700,7 @@ def test_switchgear_list_no_login():
 
 
 @pytest.mark.django_db
-def test_switchgear_no_perm(user):
+def test_switchgear_c_no_perm(user):
     client = Client()
     client.force_login(user)
     response = client.get(reverse('switchgear_add'))
@@ -626,6 +725,37 @@ def test_switchgear_c_with_perm_post(user_perm_c_switchgear, add_order, add_swit
         'switchgear_parameters': add_switchgearparameters.pk, 'made_by': user_perm_c_switchgear.pk
     }
     response = client.post(reverse('switchgear_add'), data=a)
+    assert response.status_code == 302
+    Switchgear.objects.get(**a)
+
+
+@pytest.mark.django_db
+def test_switchgear_passing_order_c_no_perm(user, add_order):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_add_order_pass', kwargs={'order_id': add_order.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgear_passing_order_c_with_perm_get(user_perm_c_switchgear, add_order):
+    client = Client()
+    client.force_login(user_perm_c_switchgear)
+    print(add_order.pk)
+    response = client.get(reverse('switchgear_add_order_pass', kwargs={'order_id': add_order.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgear_passing_order_c_with_perm_post(user_perm_c_switchgear, add_order, add_switchgearparameters):
+    client = Client()
+    client.force_login(user_perm_c_switchgear)
+    x = '1'
+    a = {
+        'order_ref': add_order.pk, 'name': x, 'serial_no': x,
+        'switchgear_parameters': add_switchgearparameters.pk, 'made_by': user_perm_c_switchgear.pk
+    }
+    response = client.post(reverse('switchgear_add_order_pass', kwargs={'order_id': add_order.pk}), data=a)
     assert response.status_code == 302
     Switchgear.objects.get(**a)
 
@@ -898,7 +1028,7 @@ def test_switchgearcomponents_r_no_perm(user, add_switchgearcomponents, add_swit
 
 
 @pytest.mark.django_db
-def test_switchgearcomponents_r_no_perm(user_perm_cr_switchgearcomponents, add_switchgearcomponents, add_switchgear):
+def test_switchgearcomponents_r_with_perm(user_perm_cr_switchgearcomponents, add_switchgearcomponents, add_switchgear):
     client = Client()
     client.force_login(user_perm_cr_switchgearcomponents)
     response = client.get(reverse('switchgear_components_detail', kwargs={'switchgear_id': add_switchgear.pk}))
@@ -973,3 +1103,99 @@ def test_switchgearcomponents_d_with_perm_post(user_perm_crud_switchgearcomponen
     assert response.status_code == 302
     with pytest.raises(ObjectDoesNotExist):
         SwitchgearComponents.objects.get(pk=add_switchgearcomponents.pk)
+
+
+# SwitchgearPhotos VIEWS TESTS
+
+@pytest.mark.django_db
+def test_switchgearphotos_no_login(add_switchgear):
+    client = Client()
+    response = client.get(reverse('switchgear_photos_add', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 302
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_no_perm(user, add_switchgear):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_photos_add', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_c_with_perm_get(user_perm_c_switchgearphotos, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_c_switchgearphotos)
+    response = client.get(reverse('switchgear_photos_add', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_c_with_perm_post(user_perm_c_switchgearphotos, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_c_switchgearphotos)
+    x = '1'
+    a = {
+        'ref_switchgear': add_switchgear.pk,
+        'photo': x
+    }
+    response = client.post(reverse('switchgear_photos_add', kwargs={'switchgear_id': add_switchgear.pk}), data=a)
+    assert response.status_code == 302
+    SwitchgearPhotos.objects.get(ref_switchgear=add_switchgear.pk)
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_r_no_perm(user, add_switchgear):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('switchgear_photos', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_r_with_perm(user_perm_cr_switchgearphotos, add_switchgear):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearphotos)
+    response = client.get(reverse('switchgear_photos', kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_list_get_not_empty(user_perm_cr_switchgearphotos, add_switchgear, photos):
+    client = Client()
+    client.force_login(user_perm_cr_switchgearphotos)
+    response = client.get(reverse("switchgear_photos", kwargs={'switchgear_id': add_switchgear.pk}))
+    assert response.status_code == 200
+    object_list = response.context['object_list']
+    assert object_list.count() == len(photos)
+    for item in photos:
+        assert item in object_list
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_d_no_perm(user, add_switchgear, photos):
+    client = Client()
+    client.force_login(user)
+    response = client.get(
+        reverse('switchgear_photos_delete', kwargs={'switchgear_id': add_switchgear.pk, 'pk': photos[0].pk}))
+    assert response.status_code == 403
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_d_with_perm_get(user_perm_crud_switchgearphotos, add_switchgear, photos):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearphotos)
+    response = client.get(
+        reverse('switchgear_photos_delete', kwargs={'switchgear_id': add_switchgear.pk, 'pk': photos[0].pk}))
+    assert response.status_code == 200
+
+
+@pytest.mark.django_db
+def test_switchgearphotos_d_with_perm_post(user_perm_crud_switchgearphotos, add_switchgear, photos):
+    client = Client()
+    client.force_login(user_perm_crud_switchgearphotos)
+    response = client.post(
+        reverse('switchgear_photos_delete', kwargs={'switchgear_id': add_switchgear.pk, 'pk': photos[0].pk}))
+    assert response.status_code == 302
+    with pytest.raises(ObjectDoesNotExist):
+        SwitchgearComponents.objects.get(pk=photos[0].pk)
