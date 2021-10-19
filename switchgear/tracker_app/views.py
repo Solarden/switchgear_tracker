@@ -1,20 +1,20 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpResponse
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, FormView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, FormView, ListView
 from django_filters.views import FilterView
 
 from tracker_app.filters import SwitchgearFilter, SwitchgearComponentsFilter, SwitchgearParametersFilter, \
     ClientFilter, OrderFilter, ComponentFilter, WorkerFilter
 from tracker_app.forms import WorkerCreationForm, CompanyModelForm, WorkerChangeForm, SwitchgearModelForm, \
     SwitchgearComponentsModelForm, SwitchgearParametersModelForm, ClientModelForm, OrderModelForm, ComponentModelForm, \
-    WorkerPasswordChangeForm, AdminWorkerChangeForm
+    WorkerPasswordChangeForm, AdminWorkerChangeForm, SwitchgearPhotosModelForm
 from tracker_app.models import Company, Worker, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
-    Component
+    Component, SwitchgearPhotos
 
 
 class Main(LoginRequiredMixin, View):
@@ -351,7 +351,6 @@ class SwitchgearComponentsCreateView(PermissionRequiredMixin, CreateView):
             obj.stuff_missing = True
             obj.save()
         return super().form_valid(form)
-
 
 
 class SwitchgearComponentsUpdateView(PermissionRequiredMixin, UpdateView):
@@ -734,6 +733,70 @@ class ComponentListView(PermissionRequiredMixin, FilterView):
     template_name = 'list/component_list.html'
     filterset_class = ComponentFilter
     paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
+
+
+class SwitchgearPhotosDetailView(PermissionRequiredMixin, ListView):
+    permission_required = ['tracker_app.view_switchgearphotos']
+    model = SwitchgearPhotos
+    template_name = 'detail/switchgear_photos.html'
+    context_object_name = 'switchgear_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['photos'] = SwitchgearPhotos.objects.filter(ref_switchgear=self.kwargs['switchgear_id'])
+        context['switchgear'] = Switchgear.objects.get(pk=self.kwargs['switchgear_id'])
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
+
+
+class SwitchgearPhotosCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = ['tracker_app.add_switchgearphotos']
+    model = SwitchgearPhotos
+    form_class = SwitchgearPhotosModelForm
+    template_name = 'forms/form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['company'] = Company.objects.get(pk=1)
+            return context
+        except ObjectDoesNotExist:
+            return context
+
+    def get_initial(self):
+        ref_switchgear = Switchgear.objects.get(pk=self.kwargs['switchgear_id'])
+        return {
+            'ref_switchgear': ref_switchgear,
+        }
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_detail', kwargs={'pk': self.kwargs['switchgear_id']})
+
+    def form_valid(self, form):
+        obj = form.cleaned_data['ref_switchgear']
+        obj.has_photos = True
+        obj.save()
+        return super().form_valid(form)
+
+
+class SwitchgearPhotosDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['tracker_app.delete_switchgearphotos']
+    model = SwitchgearPhotos
+    template_name = 'delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('switchgear_photos', kwargs={'switchgear_id': self.kwargs['switchgear_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

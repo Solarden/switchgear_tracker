@@ -5,13 +5,17 @@ from django.db import models
 fs_logo = FileSystemStorage(location='media/logos/')
 
 
+def company_logos_directory_path(instance, filename):
+    return 'company_{0}/{1}'.format(instance.pk, filename)
+
+
 class Company(models.Model):
     name = models.CharField(max_length=128, unique=True)
     owner = models.CharField(max_length=64)
     nip = models.CharField(max_length=13)
     hq = models.TextField()
     prod = models.TextField()
-    logo = models.FileField(storage=fs_logo, null=True, blank=True)
+    logo = models.FileField(storage=fs_logo, null=True, blank=True, upload_to=company_logos_directory_path)
 
     def __str__(self):
         return self.name
@@ -68,6 +72,8 @@ class Switchgear(models.Model):
     made_by = models.ManyToManyField(Worker)
     components = models.ManyToManyField('Component', through='SwitchgearComponents')
     stuff_missing = models.BooleanField(default=False)
+    has_photos = models.BooleanField(default=False)
+    photos = models.ManyToManyField('SwitchgearPhotos')
 
     def __str__(self):
         return self.name
@@ -92,3 +98,15 @@ class SwitchgearComponents(models.Model):
 
     def __str__(self):
         return self.component.name
+
+
+def switchgear_photos_directory_path(instance, filename):
+    return 'switchgear_{0}/{1}'.format(instance.ref_switchgear.name, filename)
+
+
+class SwitchgearPhotos(models.Model):
+    ref_switchgear = models.ForeignKey(Switchgear, on_delete=models.PROTECT)
+    photo = models.FileField(storage=fs_logo, null=True, blank=True, upload_to=switchgear_photos_directory_path)
+
+    def __str__(self):
+        return f'zdjęcie {self.ref_switchgear.name}'

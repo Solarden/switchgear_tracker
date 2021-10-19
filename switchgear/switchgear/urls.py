@@ -27,7 +27,8 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     SwitchgearParametersCreateView, ClientUpdateView, ClientDeleteView, OrderListView, OrderCreateView, OrderDetailView, \
     OrderUpdateView, OrderDeleteView, ComponentListView, ComponentCreateView, ComponentUpdateView, ComponentDeleteView, \
     WorkerPasswordChangeFormView, ClientDetailView, WorkerListView, AdminWorkerDetailView, AdminWorkerUpdateView, \
-    OrderCreateViewPassingClient, SwitchgearCreateModelFormPassingOrder
+    OrderCreateViewPassingClient, SwitchgearCreateModelFormPassingOrder, SwitchgearPhotosDetailView, \
+    SwitchgearPhotosCreateView, SwitchgearPhotosDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,6 +48,11 @@ urlpatterns = [
     path('worker/edit/password/', WorkerPasswordChangeFormView.as_view(), name='worker_edit_password'),
     path('switchgear/', SwitchgearListView.as_view(), name='switchgear_list'),
     path('switchgear/<int:pk>/', SwitchgearDetailView.as_view(), name='switchgear_detail'),
+    path('switchgear/<int:switchgear_id>/photos/', SwitchgearPhotosDetailView.as_view(), name='switchgear_photos'),
+    path('switchgear/<int:switchgear_id>/photos/add/', SwitchgearPhotosCreateView.as_view(),
+         name='switchgear_photos_add'),
+    path('switchgear/<int:switchgear_id>/photos/<int:pk>/delete', SwitchgearPhotosDeleteView.as_view(),
+         name='switchgear_photos_delete'),
     path('switchgear/add/', SwitchgearCreateModelForm.as_view(), name='switchgear_add'),
     path('switchgear/<int:order_id>/add/', SwitchgearCreateModelFormPassingOrder.as_view(),
          name='switchgear_add_order_pass'),
