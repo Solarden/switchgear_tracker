@@ -45,6 +45,9 @@
                 {{ objs_worker.username }} {% endfor %}</li>
             <li class="list-group-item text-center">Komponenty: <a
                     href="{% url 'switchgear_components_detail' switchgear.pk %}" class="link-dark">Szczegóły</a></li>
+            <li class="list-group-item text-center">Zdjęcia rozdzielni: {% if switchgear.has_photos %}<a
+                    href="{% url 'switchgear_photos' switchgear.pk %}" class="link-dark">Dostępne</a>{% else %}
+                Niedostępne{% endif %}</li>
         </ul>
         <br>
         <div class="text-center">

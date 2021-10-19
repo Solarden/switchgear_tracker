@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from tracker_app.forms import WorkerCreationForm, WorkerChangeForm
 from tracker_app.models import Worker, Company, Switchgear, Client, SwitchgearComponents, Component, \
-    SwitchgearParameters, Order
+    SwitchgearParameters, Order, SwitchgearPhotos
 
 
 class CustomUserAdmin(UserAdmin):
@@ -21,3 +21,4 @@ admin.site.register(SwitchgearComponents)
 admin.site.register(Component)
 admin.site.register(SwitchgearParameters)
 admin.site.register(Order)
+admin.site.register(SwitchgearPhotos)

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load groupfilter %}
+{% block content %}
+    <div class="container">
+        <div class="row ms-auto">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                {% if request.user|group:"biuro,admin" %}<a href="{% url 'switchgear_photos_add' switchgear.pk %}">
+                    <button class="btn btn-success">Dodaj zdjęcie</button>
+                </a>{% endif %}
+            </div>
+        </div>
+        <h3 class="text-center">Zdjęcia rozdzielni {{ switchgear }}:</h3>
+        <ul class="list-group list-group-flush">
+            {% for item in photos %}
+                <li class="list-group-item text-center"><img src="{{ item.photo.url }}" width="500px">
+                    {% if request.user|group:"biuro,admin" %}
+                        <a href="{% url 'switchgear_photos_delete' switchgear.pk item.pk %}">
+                            <button class="btn btn-danger">Usuń zdjęcie</button>
+                        </a>{% endif %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

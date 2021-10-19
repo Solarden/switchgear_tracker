@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 from tracker_app.models import Worker, Company, Switchgear, SwitchgearComponents, SwitchgearParameters, Client, Order, \
-    Component
+    Component, SwitchgearPhotos
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -204,4 +204,17 @@ class ComponentModelForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'producer': forms.TextInput(attrs={'class': 'form-control'}),
             'catalogue_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+
+class SwitchgearPhotosModelForm(forms.ModelForm):
+    class Meta:
+        model = SwitchgearPhotos
+        fields = '__all__'
+        labels = {
+            'ref_switchgear': 'Nazwa rozdzielni',
+            'photo': 'Zdjęcie rozdzielni',
+        }
+        widgets = {
+            'ref_switchgear': forms.Select(attrs={'class': 'form-control'}),
         }
