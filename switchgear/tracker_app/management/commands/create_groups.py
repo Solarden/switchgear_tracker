@@ -4,7 +4,7 @@ from django.contrib.auth.models import Permission
 
 
 class Command(BaseCommand):
-    help = 'Creates read only default permission groups for users'
+    help = 'Creates permission groups for users'
 
     def handle(self, *args, **options):
         print('Creating admin group')
