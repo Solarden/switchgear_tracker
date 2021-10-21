@@ -279,7 +279,7 @@ class SwitchgearCreateModelFormPassingOrder(PermissionRequiredMixin, CreateView)
             return context
 
     def get_initial(self):
-        order = Client.objects.get(pk=self.kwargs['order_id'])
+        order = Order.objects.get(pk=self.kwargs['order_id'])
         return {
             'order_ref': order,
         }

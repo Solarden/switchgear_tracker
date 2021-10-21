@@ -741,7 +741,6 @@ def test_switchgear_passing_order_c_no_perm(user, add_order):
 def test_switchgear_passing_order_c_with_perm_get(user_perm_c_switchgear, add_order):
     client = Client()
     client.force_login(user_perm_c_switchgear)
-    print(add_order.pk)
     response = client.get(reverse('switchgear_add_order_pass', kwargs={'order_id': add_order.pk}))
     assert response.status_code == 200
 
