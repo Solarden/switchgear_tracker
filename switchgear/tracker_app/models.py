@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.files.storage import FileSystemStorage
 from django.db import models
-from tracker_app.default_entries import company
 
 fs_logo = FileSystemStorage(location='media/logos/')
 
@@ -18,15 +17,8 @@ class Company(models.Model):
     prod = models.TextField()
     logo = models.FileField(storage=fs_logo, null=True, blank=True, upload_to=company_logos_directory_path)
 
-    company = company
-
     def __str__(self):
         return self.name
-
-    @classmethod
-    def default_company(cls):
-        for item in cls.company:
-            cls.objects.create(**item)
 
 
 class Worker(AbstractUser):
