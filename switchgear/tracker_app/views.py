@@ -242,6 +242,13 @@ class SwitchgearUpdateView(PermissionRequiredMixin, UpdateView):
         except ObjectDoesNotExist:
             return context
 
+    def get_initial(self):
+        switchgear = Switchgear.objects.get(pk=self.kwargs['pk'])
+        return {
+            'has_photos': switchgear.has_photos,
+            'stuff_missing': switchgear.stuff_missing,
+        }
+
 
 class SwitchgearCreateModelForm(PermissionRequiredMixin, CreateView):
     permission_required = ['tracker_app.add_switchgear']

@@ -114,6 +114,8 @@ class SwitchgearModelForm(forms.ModelForm):
             'actual_shipment': forms.DateInput(
                 attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'Wprowadź datę wysyłki'}),
             'made_by': forms.SelectMultiple(attrs={'class': 'form-control'}),
+            'stuff_missing': forms.HiddenInput(),
+            'has_photos': forms.HiddenInput(),
         }
 
 

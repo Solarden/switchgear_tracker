@@ -18,10 +18,16 @@ class SwitchgearFilter(django_filters.FilterSet):
                            widget=forms.Select(attrs={'class': 'form-control'}))
     made_by = ModelChoiceFilter(field_name='made_by', label='Wykonana przez:', queryset=Worker.objects.all(),
                                 widget=forms.Select(attrs={'class': 'form-control'}))
+    ready_to_ship = ChoiceFilter(field_name='ready_to_ship', label='Wykonana:', choices=SHIPPED_CHOICES,
+                                 widget=forms.Select(attrs={'class': 'form-control'}))
+    has_photos = ChoiceFilter(field_name='has_photos', label='Zdjęcia:', choices=SHIPPED_CHOICES,
+                              widget=forms.Select(attrs={'class': 'form-control'}))
+    stuff_missing = ChoiceFilter(field_name='stuff_missing', label='Zdjęcia:', choices=SHIPPED_CHOICES,
+                                 widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Switchgear
-        fields = ('name', 'serial_no', 'shipped', 'made_by')
+        fields = ('name', 'serial_no', 'shipped', 'made_by', 'ready_to_ship', 'stuff_missing', 'has_photos')
 
 
 class SwitchgearComponentsFilter(django_filters.FilterSet):

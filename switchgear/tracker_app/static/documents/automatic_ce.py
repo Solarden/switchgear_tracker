@@ -26,7 +26,7 @@ def automatic_ce_gen(request, switchgear_id):
     paragraph_header_logo.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
     paragraph_place = document.add_paragraph(
-        f"""Miejsce i data wystawienia dokumentu:                                   Warszawa, dn. {doc_date} r.""")
+        f"""Miejsce i data wystawienia dokumentu:                                   Warszawa, dn. {doc_date}""")
     paragraph_place_format = paragraph_place.paragraph_format
     paragraph_place_format.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
