@@ -622,6 +622,7 @@ class OrderCreateViewPassingClient(PermissionRequiredMixin, CreateView):
         }
 
 
+# CHANGE TO FILTER VIEW?
 class OrderDetailView(PermissionRequiredMixin, DetailView):
     permission_required = ['tracker_app.view_order']
     login_url = 'login'
