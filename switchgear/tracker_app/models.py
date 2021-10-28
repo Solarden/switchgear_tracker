@@ -16,6 +16,9 @@ class Company(models.Model):
     hq = models.TextField()
     prod = models.TextField()
     logo = models.FileField(storage=fs_logo, null=True, blank=True, upload_to=company_logos_directory_path)
+    email = models.CharField(max_length=64, null=True)
+    contact_no1 = models.CharField(max_length=64, null=True)
+    contact_no2 = models.CharField(max_length=64, null=True)
 
     def __str__(self):
         return self.name

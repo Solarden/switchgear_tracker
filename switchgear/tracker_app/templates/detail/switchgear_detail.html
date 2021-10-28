@@ -51,6 +51,7 @@
         {% if switchgear.shipped and request.user|group:"biuro,admin" %}
             <li class="list-group-item text-center">Dokumenty:
             <a href="{% url 'switchgear_gen_doc_ce' switchgear.pk %}" class="link-dark">Wygeneruj CE.docx</a>
+            <a href="{% url 'switchgear_gen_doc_guarantee' switchgear.pk %}" class="link-dark">Wygeneruj Gwarancję.docx</a>
         </li>
         {% endif %}
     </ul>

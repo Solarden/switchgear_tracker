@@ -30,6 +30,7 @@ from tracker_app.views import Main, SignUpView, DetailCompanyView, UpdateCompany
     OrderCreateViewPassingClient, SwitchgearCreateModelFormPassingOrder, SwitchgearPhotosDetailView, \
     SwitchgearPhotosCreateView, SwitchgearPhotosDeleteView
 from tracker_app.static.documents.automatic_ce import automatic_ce_gen
+from tracker_app.static.documents.automatic_gurantee import automatic_guarantee
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -90,7 +91,9 @@ urlpatterns = [
     path('component/add/', ComponentCreateView.as_view(), name='component_add'),
     path('component/edit/<int:pk>/', ComponentUpdateView.as_view(), name='component_edit'),
     path('component/delete/<int:pk>/', ComponentDeleteView.as_view(), name='component_delete'),
+    # DOCUMENTS
     path('switchgear/<int:switchgear_id>/ce_gen_doc/', automatic_ce_gen, name='switchgear_gen_doc_ce'),
+    path('switchgear/<int:switchgear_id>/guarantee_gen_doc/', automatic_guarantee, name='switchgear_gen_doc_guarantee'),
 ]
 
 if settings.DEBUG:
