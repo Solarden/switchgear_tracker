@@ -9,38 +9,36 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('Creating admin group')
         group_admin = Group.objects.get_or_create(name='admin')
-        for i in range(25, 61):
+        for i in range(20, 57):
             p = Permission.objects.get(id=i)
             group_admin[0].permissions.add(p)
         print('Creating biuro group')
         group_biuro = Group.objects.get_or_create(name='biuro')
-        for i in range(25, 37):
+        for i in range(20, 25):
             p = Permission.objects.get(id=i)
             group_biuro[0].permissions.add(p)
-        for i in range(41, 49):
+        p26 = Permission.objects.get(id=26)
+        group_biuro[0].permissions.add(p26)
+        for i in range(28, 45):
             p = Permission.objects.get(id=i)
             group_biuro[0].permissions.add(p)
-        p50 = Permission.objects.get(id=50)
-        group_biuro[0].permissions.add(p50)
-        for i in range(52, 58):
+        for i in range(49, 57):
             p = Permission.objects.get(id=i)
             group_biuro[0].permissions.add(p)
-        p59 = Permission.objects.get(id=59)
-        p60 = Permission.objects.get(id=60)
-        group_biuro[0].permissions.add(p59, p60)
         print('Creating prod group')
         group_prod = Group.objects.get_or_create(name='prod')
+        p24 = Permission.objects.get(id=24)
         p28 = Permission.objects.get(id=28)
+        p29 = Permission.objects.get(id=29)
+        p30 = Permission.objects.get(id=30)
         p32 = Permission.objects.get(id=32)
-        p33 = Permission.objects.get(id=33)
-        p34 = Permission.objects.get(id=34)
         p36 = Permission.objects.get(id=36)
+        p37 = Permission.objects.get(id=37)
         p44 = Permission.objects.get(id=44)
-        p48 = Permission.objects.get(id=48)
+        p49 = Permission.objects.get(id=49)
+        p50 = Permission.objects.get(id=50)
         p52 = Permission.objects.get(id=52)
         p53 = Permission.objects.get(id=53)
-        p54 = Permission.objects.get(id=54)
         p56 = Permission.objects.get(id=56)
-        p57 = Permission.objects.get(id=57)
-        group_prod[0].permissions.add(p28, p32, p33, p34, p36, p44, p48, p52, p53, p54, p56, p57, p60)
+        group_prod[0].permissions.add(p24, p28, p29, p30, p32, p36, p37, p44, p49, p50, p52, p53, p56)
         print('Groups configured')
