@@ -87,7 +87,8 @@
                         </svg> {% endif %}</td>
                     <td>{% if item.stuff_missing %}
                         <a href="{% url 'switchgear_components_detail' item.pk %}" class="link-danger">Tak</a>{% else %}
-                        Nie{% endif %}</td>
+                         <a href="{% url 'switchgear_components_add' item.pk %}"
+                            class="link-dark">Nie</a>{% endif %}</td>
                     <td>{% if item.has_photos %}
                         <a href="{% url 'switchgear_photos' item.pk %}" class="link-dark">Tak</a>{% else %}
                         <a href="{% url 'switchgear_photos_add' item.pk %}" class="link-danger">Nie</a>{% endif %}</td>

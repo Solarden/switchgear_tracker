@@ -5,7 +5,9 @@
 <div class="container">
     <h3 class="text-center">Informacje dotyczące rozdzielni:</h3>
     <ul class="list-group list-group-flush">
-        <li class="list-group-item text-center">Numer zamówienia: {{ switchgear.order_ref }}</li>
+        <li class="list-group-item text-center">Numer zamówienia: <a
+                href="{% url 'order_detail' switchgear.order_ref.pk %}"
+                class="link-dark">{{ switchgear.order_ref }}</a></li>
         <li class="list-group-item text-center">Nazwa rozdzielni: {{ switchgear.name }}</li>
         <li class="list-group-item text-center">Numer seryjny: {{ switchgear.serial_no }}</li>
         <li class="list-group-item text-center">Charakterystyka rozdzielni:
@@ -47,7 +49,7 @@
                 href="{% url 'switchgear_components_detail' switchgear.pk %}" class="link-dark">Szczegóły</a></li>
         <li class="list-group-item text-center">Zdjęcia rozdzielni: {% if switchgear.has_photos %}<a
                 href="{% url 'switchgear_photos' switchgear.pk %}" class="link-dark">Dostępne</a>{% else %}
-            Niedostępne{% endif %}</li>
+            <a href="{% url 'switchgear_photos_add' switchgear.pk %}" class="link-dark">Niedostępne</a>{% endif %}</li>
         {% if switchgear.shipped and request.user|group:"biuro,admin" %}
             <li class="list-group-item text-center">Dokumenty:
             <a href="{% url 'switchgear_gen_doc_ce' switchgear.pk %}" class="link-dark">Wygeneruj CE.docx</a>

@@ -789,7 +789,7 @@ class SwitchgearPhotosCreateView(PermissionRequiredMixin, CreateView):
         }
 
     def get_success_url(self):
-        return reverse_lazy('switchgear_detail', kwargs={'pk': self.kwargs['switchgear_id']})
+        return reverse_lazy('switchgear_photos', kwargs={'switchgear_id': self.kwargs['switchgear_id']})
 
     def form_valid(self, form):
         obj = form.cleaned_data['ref_switchgear']
