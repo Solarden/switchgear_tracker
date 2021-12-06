@@ -737,7 +737,7 @@
     }
 
     static get NAME() {
-      throw new Error('You have to implement the static method "NAME", for each component!');
+      throw new Error('You have to implement the staticfiles method "NAME", for each component!');
     }
 
     static get DATA_KEY() {
@@ -2175,7 +2175,7 @@
       this._popper = Popper__namespace.createPopper(referenceElement, this._menu, popperConfig);
 
       if (isDisplayStatic) {
-        Manipulator.setDataAttribute(this._menu, 'popper', 'static');
+        Manipulator.setDataAttribute(this._menu, 'popper', 'staticfiles');
       }
     }
 
@@ -2242,9 +2242,9 @@
             offset: this._getOffset()
           }
         }]
-      }; // Disable Popper if we have a static display
+      }; // Disable Popper if we have a staticfiles display
 
-      if (this._config.display === 'static') {
+      if (this._config.display === 'staticfiles') {
         defaultBsPopperConfig.modifiers = [{
           name: 'applyStyles',
           enabled: false
@@ -2781,7 +2781,7 @@
   const CLASS_NAME_OPEN = 'modal-open';
   const CLASS_NAME_FADE$3 = 'fade';
   const CLASS_NAME_SHOW$4 = 'show';
-  const CLASS_NAME_STATIC = 'modal-static';
+  const CLASS_NAME_STATIC = 'modal-staticfiles';
   const OPEN_SELECTOR$1 = '.modal.show';
   const SELECTOR_DIALOG = '.modal-dialog';
   const SELECTOR_MODAL_BODY = '.modal-body';
@@ -2910,7 +2910,7 @@
     _initializeBackDrop() {
       return new Backdrop({
         isVisible: Boolean(this._config.backdrop),
-        // 'static' option will be translated to true, and booleans will keep their value
+        // 'staticfiles' option will be translated to true, and booleans will keep their value
         isAnimated: this._isAnimated()
       });
     }
@@ -3032,7 +3032,7 @@
 
         if (this._config.backdrop === true) {
           this.hide();
-        } else if (this._config.backdrop === 'static') {
+        } else if (this._config.backdrop === 'staticfiles') {
           this._triggerBackdropTransition();
         }
       });
