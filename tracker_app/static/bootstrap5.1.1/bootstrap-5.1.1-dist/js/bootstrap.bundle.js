@@ -715,7 +715,7 @@
     }
 
     static get NAME() {
-      throw new Error('You have to implement the staticfiles method "NAME", for each component!');
+      throw new Error('You have to implement the static method "NAME", for each component!');
     }
 
     static get DATA_KEY() {
@@ -2243,11 +2243,11 @@
     var window = getWindow(element);
     var offsetParent = getTrueOffsetParent(element);
 
-    while (offsetParent && isTableElement(offsetParent) && getComputedStyle$1(offsetParent).position === 'staticfiles') {
+    while (offsetParent && isTableElement(offsetParent) && getComputedStyle$1(offsetParent).position === 'static') {
       offsetParent = getTrueOffsetParent(offsetParent);
     }
 
-    if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && getComputedStyle$1(offsetParent).position === 'staticfiles')) {
+    if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && getComputedStyle$1(offsetParent).position === 'static')) {
       return window;
     }
 
@@ -2425,7 +2425,7 @@
       if (offsetParent === getWindow(popper)) {
         offsetParent = getDocumentElement(popper);
 
-        if (getComputedStyle$1(offsetParent).position !== 'staticfiles' && position === 'absolute') {
+        if (getComputedStyle$1(offsetParent).position !== 'static' && position === 'absolute') {
           heightProp = 'scrollHeight';
           widthProp = 'scrollWidth';
         }
@@ -3939,7 +3939,7 @@
       this._popper = createPopper(referenceElement, this._menu, popperConfig);
 
       if (isDisplayStatic) {
-        Manipulator.setDataAttribute(this._menu, 'popper', 'staticfiles');
+        Manipulator.setDataAttribute(this._menu, 'popper', 'static');
       }
     }
 
@@ -4006,9 +4006,9 @@
             offset: this._getOffset()
           }
         }]
-      }; // Disable Popper if we have a staticfiles display
+      }; // Disable Popper if we have a static display
 
-      if (this._config.display === 'staticfiles') {
+      if (this._config.display === 'static') {
         defaultBsPopperConfig.modifiers = [{
           name: 'applyStyles',
           enabled: false
@@ -4545,7 +4545,7 @@
   const CLASS_NAME_OPEN = 'modal-open';
   const CLASS_NAME_FADE$3 = 'fade';
   const CLASS_NAME_SHOW$4 = 'show';
-  const CLASS_NAME_STATIC = 'modal-staticfiles';
+  const CLASS_NAME_STATIC = 'modal-static';
   const OPEN_SELECTOR$1 = '.modal.show';
   const SELECTOR_DIALOG = '.modal-dialog';
   const SELECTOR_MODAL_BODY = '.modal-body';
@@ -4674,7 +4674,7 @@
     _initializeBackDrop() {
       return new Backdrop({
         isVisible: Boolean(this._config.backdrop),
-        // 'staticfiles' option will be translated to true, and booleans will keep their value
+        // 'static' option will be translated to true, and booleans will keep their value
         isAnimated: this._isAnimated()
       });
     }
@@ -4796,7 +4796,7 @@
 
         if (this._config.backdrop === true) {
           this.hide();
-        } else if (this._config.backdrop === 'staticfiles') {
+        } else if (this._config.backdrop === 'static') {
           this._triggerBackdropTransition();
         }
       });
