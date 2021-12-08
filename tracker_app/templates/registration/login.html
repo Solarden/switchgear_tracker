@@ -75,16 +75,69 @@
             padding: 10px;
             margin-top: 10px;
         }
+
+        body {
+            font-family: sans-serif;
+            color: white;
+            background: grey;
+        }
+
+        .sticker-wrapper {
+            font-size: 1em;
+        }
+
+        .sticker {
+            position: relative;
+            display: table;
+            width: 10em;
+            height: 10em;
+            padding: 1em;
+            border-radius: 100%;
+            background: rgb(255, 215, 7);
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .sticker p {
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+            color: black;
+        }
+
+        .sticker .fold {
+            content: "";
+            display: block;
+            width: 10em;
+            height: 10em;
+            position: absolute;
+            right: -6em;
+            top: -6em;
+            border-radius: 100%;
+            background: -webkit-linear-gradient(-135deg, transparent 11.3em, #feeba7 10em, #feeba7 10em, #feeba7 85%);
+        }
+
+        .sticker.yellow {
+            background: rgb(255, 215, 7);
+            background: -webkit-linear-gradient(-135deg, transparent 2.82em, rgb(255, 215, 7) 0, rgb(255, 215, 7));
+        }
+
     </style>
 
 </head>
 <body>
 <div class="container h-100">
     <div class="d-flex justify-content-center h-100">
+        <div class="sticker-wrapper">
+            <aside class="sticker yellow">
+                <p>Nie zapomnij hasła!
+                U:admin; biuro; produkcja
+                P:tymczasowe</p>
+                <span class="fold"></span>
+            </aside>
+        </div>
         <div class="user_card">
             <div class="d-flex justify-content-center">
-
-
                 <h3 id="form-title">ZALOGUJ</h3>
             </div>
             <div class="d-flex justify-content-center form_container">
@@ -102,24 +155,19 @@
                         </div>
                         <input type="password" name="password" placeholder="Hasło..." class="form-control">
                     </div>
-
                     <div class="d-flex justify-content-center mt-3 login_container">
                         <input class="btn login_btn" type="submit" value="Zaloguj">
                     </div>
                 </form>
-
             </div>
-
             <div class="mt-4">
                 <div class="d-flex justify-content-center links">
                     Nie masz konta? <a href="{% url 'signup' %}" class="ml-2">Zarejestruj się</a>
                 </div>
-
             </div>
             {{ form.errors }}
         </div>
     </div>
 </div>
 </body>
-
 </html>
