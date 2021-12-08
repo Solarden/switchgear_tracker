@@ -81,11 +81,12 @@ WSGI_APPLICATION = 'switchgear.wsgi.application'
 
 DATABASES = {
     'default': {
-        'HOST': 'localhost',
-        'NAME': 'switchgear_db',
+        'HOST': 'database endpoint',
+        'NAME': 'database name',
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'postgres',
-        'PASSWORD': 'coderslab',
+        'USER': 'database user',
+        'PASSWORD': 'database password',
+        'PORT': 'database port',
     }
 }
 
