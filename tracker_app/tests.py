@@ -382,7 +382,8 @@ def test_company_u_with_perm_post(user_perm_cru_company, add_company):
     client = Client()
     client.force_login(user_perm_cru_company)
     a = {
-        'name': 'test', 'owner': 'test', 'nip': 'test', 'hq': 'test', 'prod': 'test', 'logo': 'test'
+        'name': 'test', 'owner': 'test', 'nip': 'test', 'hq': 'test', 'prod': 'test', 'logo': 'test', 'email': 'email',
+        'contact_no1': 'contact_no1', 'contact_no2': 'contact_no1'
     }
     response = client.post(reverse('company_edit', kwargs={'pk': add_company.pk}), data=a)
     assert response.status_code == 302

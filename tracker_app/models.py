@@ -6,7 +6,7 @@ fs_logo = FileSystemStorage(location='media/logos/')
 
 
 def company_logos_directory_path(instance, filename):
-    return 'company_{0}/{1}'.format(instance.pk, filename)
+    return 'company_{0}/{1}'.format(instance.id, filename)
 
 
 class Company(models.Model):
